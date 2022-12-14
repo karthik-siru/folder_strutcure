@@ -36,7 +36,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => res.send('Welcome'));
 app.use('/api', require('./src/api/routes'));
-/*
+
 // send back a 404 error for any unknown api routes
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Route Not Found'));
@@ -67,6 +67,6 @@ app.use((err, req, res, next) => {
 });
 
 
-*/
+
 
 module.exports = app;

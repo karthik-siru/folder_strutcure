@@ -5,8 +5,12 @@ const  authService = require('../services/AuthService');
 
 const login = catchAsync(async (req, res) => {
   const { id, password } = req.body;
-  const user = await authService.loginUserWithEmailAndPassword(id, password);
-  const tokens = await tokenService.generateAuthTokens(user);
+  //login
+
+
+  //generate token
+
+  
   res.send({ user, tokens });
 });
 

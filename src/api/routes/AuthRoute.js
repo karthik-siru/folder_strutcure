@@ -1,5 +1,4 @@
 const express = require('express');
-const authValidation = require('../validations/AuthValidation');
 const authController = require('../controllers/AuthController');
 const auth = require('../middlewares/auth');
 const router = express.Router();
@@ -25,7 +24,7 @@ router.post('/login',authController.login);
  *       200:
  *         description: user information
  */
-router.post('/logout', auth(), validate(authValidation.logout), authController.logout);
+router.post('/logout', auth(), authController.logout);
 
 /**
  * @openapi
@@ -36,7 +35,7 @@ router.post('/logout', auth(), validate(authValidation.logout), authController.l
  *       200:
  *         description: user information
  */
-router.post('/refresh-tokens', validate(authValidation.refreshTokens), authController.refreshTokens);
+router.post('/refresh-tokens', authController.refreshTokens);
 
 /**
  * @openapi
@@ -47,7 +46,7 @@ router.post('/refresh-tokens', validate(authValidation.refreshTokens), authContr
  *       200:
  *         description: user information
  */
-router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
+router.post('/forgot-password', authController.forgotPassword);
 
 /**
  * @openapi
@@ -58,6 +57,6 @@ router.post('/forgot-password', validate(authValidation.forgotPassword), authCon
  *       200:
  *         description: user information
  */
-router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
+router.post('/reset-password', authController.resetPassword);
 
 module.exports = router;

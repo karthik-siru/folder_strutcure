@@ -14,7 +14,7 @@ const router = express.Router();
  *       200:
  *         description: user information
  */
-router.post('/login', validate(authValidation.login), authController.login);
+//router.post('/login', validate(authValidation.login), authController.login);
 
 /**
  * @openapi
@@ -25,7 +25,7 @@ router.post('/login', validate(authValidation.login), authController.login);
  *       200:
  *         description: user information
  */
-router.post('/logout', auth(), validate(authValidation.logout), authController.logout);
+//router.post('/logout', auth(), validate(authValidation.logout), authController.logout);
 
 /**
  * @openapi
@@ -36,7 +36,7 @@ router.post('/logout', auth(), validate(authValidation.logout), authController.l
  *       200:
  *         description: user information
  */
-router.post('/refresh-tokens', validate(authValidation.refreshTokens), authController.refreshTokens);
+//router.post('/refresh-tokens', validate(authValidation.refreshTokens), authController.refreshTokens);
 
 /**
  * @openapi
@@ -47,7 +47,7 @@ router.post('/refresh-tokens', validate(authValidation.refreshTokens), authContr
  *       200:
  *         description: user information
  */
-router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
+//router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
 
 /**
  * @openapi
@@ -58,6 +58,6 @@ router.post('/forgot-password', validate(authValidation.forgotPassword), authCon
  *       200:
  *         description: user information
  */
-router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
+//router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
 
 module.exports = router;

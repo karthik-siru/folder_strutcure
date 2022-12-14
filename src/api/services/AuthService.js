@@ -1,8 +1,6 @@
 const  { student } = require( '../models');
 const  httpStatus = require( 'http-status');
-const  { authService } = require( '../services');
 const  ApiError = require( '../utils/ApiError');
-const  { tokenTypes } = require( '../../config/tokens');
 
 /**
  * Login with username and password

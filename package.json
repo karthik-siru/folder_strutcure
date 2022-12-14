@@ -7,5 +7,23 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ravindra579/folder_strutcure.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ravindra579/folder_strutcure/issues"
+  },
+  "homepage": "https://github.com/ravindra579/folder_strutcure#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "http": "^0.0.1-security",
+    "http-status": "^1.5.3",
+    "joi": "^17.7.0",
+    "mysql": "^2.18.1",
+    "mysql-async-simple": "^1.0.3",
+    "passport": "^0.6.0"
+  }
 }

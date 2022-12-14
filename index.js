@@ -1,29 +1,12 @@
 const http = require('http');
 const cors = require('cors');
 const app = require('./app');
-const config = require('./config/config');
-const schedule = require('node-schedule');
-const mysql = require('mysql');
-const mysqlconnector = mysql.createConnection({
-  host:config.mysql_host,
-  user: config.user,
-  password: config.password,
-  database: config.db
-
-})
+//const config = require('./config/config');
 
 let server;
-mysqlconnector.connect(function(err) {
-  if (err) {
-    return console.error('error: ' + err.message);
-  }
-
-  console.log('Connected to the MySQL server.');
-  server = http.createServer({}, app);
-
-  server.listen(config.port, () => {
-    console.info(`--- 🌟  Started --- http://localhost:${config.port}`);
-  });
+server = http.createServer({}, app);
+server.listen(3000, () => {
+  console.info(`--- 🌟  Started --- http://localhost:${3000}`);
 });
 
 const exitHandler = () => {

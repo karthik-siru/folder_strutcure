@@ -1,8 +1,8 @@
 const express = require('express');
 const httpStatus = require('http-status');
-const { jwtStrategy } = require('./config/passport');
+//const { jwtStrategy } = require('./config/passport');
 const cors = require('cors');
-const ApiError = require('./api/utils/ApiError');
+const ApiError = require('./src/api/utils/ApiError');
 
 
 const app = express();
@@ -30,13 +30,13 @@ app.options(
 app.use(express.json());
 
 // parse url-encoded request body
-app.use(express.urlencoded({ extended: true }));
-passport.use('jwt', jwtStrategy);
+//app.use(express.urlencoded({ extended: true }));
+//passport.use('jwt', jwtStrategy);
 
 
 app.get('/', (req, res) => res.send('Welcome'));
-app.use('/api', require('./api/routes'));
-
+app.use('/api', require('./src/api/routes'));
+/*
 // send back a 404 error for any unknown api routes
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Route Not Found'));
@@ -67,6 +67,6 @@ app.use((err, req, res, next) => {
 });
 
 
-
+*/
 
 module.exports = app;

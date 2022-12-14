@@ -1,13 +1,12 @@
-const express = require('express');
-const httpStatus = require('http-status');
+const express = require("express");
+require("dotenv").config();
+const httpStatus = require("http-status");
 //const { jwtStrategy } = require('./config/passport');
-const cors = require('cors');
-const ApiError = require('./src/api/utils/ApiError');
-
+const cors = require("cors");
+const ApiError = require("./src/api/utils/ApiError");
 
 const app = express();
 const router = express.Router();
-
 
 // enable cors
 app.use(
@@ -18,7 +17,7 @@ app.use(
   })
 );
 app.options(
-  '*',
+  "*",
   cors({
     origin: true,
     optionsSuccessStatus: 200,
@@ -33,9 +32,9 @@ app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 //passport.use('jwt', jwtStrategy);
 
+app.get("/", (req, res) => res.send("Welcome"));
 
-app.get('/', (req, res) => res.send('Welcome'));
-app.use('/api', require('./src/api/routes'));
+app.use("/api", require("./src/api/routes"));
 /*
 // send back a 404 error for any unknown api routes
 app.use((req, res, next) => {

@@ -47,8 +47,47 @@ const mess = db.define(
   }
 );
 
+messAdmin = db.define(
+  "messAdmin",
+  {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      primaryKey: true,
+    },
+    pswd: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phno: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+  },
+  {
+    timestamps:true,
+  },
+  {
+    tableName: "mess",
+  }
+);
+
+mess.hasOne(messAdmin, {
+  foreignKey: "messId",
+  sourceKey: "messId",
+});
+
 (async () => {
   await db.sync();
 })();
 
-module.exports = mess;
+module.exports ={
+ mess,
+ messAdmin
+}

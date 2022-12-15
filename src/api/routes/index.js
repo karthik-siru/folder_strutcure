@@ -1,7 +1,7 @@
 const express = require("express");
-const authRoute = require("./AuthRoute");
-const messRoute = require("./MessRoute");
-const studentRoute = require("./StudentRoute");
+const authRoute = require("./auth");
+const messRoute = require("./mess");
+const studentRoute = require("./student");
 const router = express.Router();
 
 router.use("/auth", authRoute);

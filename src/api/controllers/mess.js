@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
-const catchAsync = require('../utils/CatchAsync');
+const catchAsync = require('../utils/catchAsync');
 const messService  = require('../services/MessService');
-const mess = require("../models/mess");
+const { mess, messAdmin } = require("../models/mess");
 
 const getMessDetails = catchAsync(async (req, res) => {
     const data = await  mess.findAll();
@@ -61,10 +61,16 @@ const updateMessDetails = catchAsync(async (req, res) => {
 });
 
 
+const getMessAdmins = catchAsync(async (req, res) => {
+    const data = await  messAdmin.findAll();
+    res.send(data);
+});
+
 module.exports = {
   getMessDetails,
   getMessDetailsByMessId,
   getMessDetailsByName,
   updateMessDetails,
-  createMess
+  createMess,
+  getMessAdmins,
 };

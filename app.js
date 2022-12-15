@@ -3,7 +3,7 @@ require("dotenv").config();
 const httpStatus = require("http-status");
 //const { jwtStrategy } = require('./config/passport');
 const cors = require("cors");
-const ApiError = require("./src/api/utils/ApiError");
+const ApiError = require("./src/api/utils/apiError");
 
 const app = express();
 const router = express.Router();

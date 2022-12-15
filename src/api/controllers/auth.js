@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const catchAsync = require('../utils/CatchAsync');
+const catchAsync = require('../utils/catchAsync');
 const  authService = require('../services/AuthService');
 
 
@@ -19,10 +19,6 @@ const logout = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send("success");
 });
 
- const refreshTokens = catchAsync(async (req, res) => {
-  const tokens = await authService.refreshAuth(req.body.refreshToken);
-  res.send({ ...tokens });
-});
 
  const forgotPassword = catchAsync(async (req, res) => {
   const resetPasswordToken = await tokenService.generateResetPasswordToken(req.body.email);
@@ -38,7 +34,6 @@ const resetPassword = catchAsync(async (req, res) => {
 module.exports = {
   login,
   logout,
-  refreshTokens,
   forgotPassword,
   resetPassword,
 };

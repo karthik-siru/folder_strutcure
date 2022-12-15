@@ -1,5 +1,6 @@
 const db = require("../../../db");
 const { DataTypes } = require("sequelize");
+const student = require('./student')
 
 const mess = db.define(
   "mess",
@@ -47,7 +48,7 @@ const mess = db.define(
   }
 );
 
-messAdmin = db.define(
+const messAdmin = db.define(
   "messAdmin",
   {
     name: {
@@ -80,11 +81,187 @@ messAdmin = db.define(
     timestamps:true,
   },
   {
-    tableName: "mess",
+    tableName: "messAdmin",
   }
 );
 
 mess.hasOne(messAdmin, {
+  foreignKey: "messId",
+  sourceKey: "messId",
+});
+
+const messUser = db.define(
+  "messUser",
+  {
+    studentId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    messId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    month: {
+      type: DataTypes.INTEGER,
+    },
+    year: {
+      type: DataTypes.INTEGER,
+    },
+  },
+  {
+    timestamps:false,
+  },
+  {
+    tableName: "messUser",
+  }
+);
+
+mess.hasMany(messUser, {
+  foreignKey: "messId",
+  sourceKey: "messId",
+});
+
+student.hasMany(messUser,{
+  foreignKey: "studentId",
+  sourceKey: "rollno",
+});
+
+const messAdminArchives = db.define(
+  "messAdminArchives",
+  {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      primaryKey: true,
+    },
+    phno: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    messId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: true,
+    },
+    fromDate:{
+      type: DataTypes.DATEONLY,
+    },
+    toDate:{
+      type: DataTypes.DATEONLY,
+    }
+  },
+  {
+    timestamps:false,
+  },
+  {
+    tableName: "messAdminArchives",
+  }
+);
+
+mess.hasMany(messAdminArchives, {
+  foreignKey: "messId",
+  sourceKey: "messId",
+});
+
+const messReview = db.define(
+  "messAdminArchives",
+  {
+    studentId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    messId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    quality: {
+      type: DataTypes.INTEGER,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+    },
+    pswd: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    taste: {
+      type: DataTypes.INTEGER,
+    },
+    catering: {
+      type: DataTypes.INTEGER,
+    },
+    hyginess: {
+      type: DataTypes.INTEGER,
+    },
+    punctuality: {
+      type: DataTypes.INTEGER,
+    },
+    month: {
+      type: DataTypes.INTEGER,
+    },
+    year: {
+      type: DataTypes.INTEGER,
+    }
+  },
+  {
+    timestamps:true,
+  },
+  {
+    tableName: "messReview",
+  }
+);
+
+mess.hasMany(messReview, {
+  foreignKey: "messId",
+  sourceKey: "messId",
+});
+
+student.hasMany(messReview,{
+  foreignKey: "studentId",
+  sourceKey: "rollno",
+});
+
+const messAvailability = db.define(
+  "mess",
+  {
+    messId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: true,
+    },
+    boysCount: {
+      type: DataTypes.INTEGER,
+    },
+    girlsCount: {
+      type: DataTypes.INTEGER,
+    },
+    boyCapacity: {
+      type: DataTypes.INTEGER,
+    },
+    girlCapacity: {
+      type: DataTypes.INTEGER,
+    },
+  },
+  {
+    timestamps:false,
+  },
+  {
+    tableName: "messAvailability",
+  }
+);
+
+mess.hasOne(messAvailability, {
   foreignKey: "messId",
   sourceKey: "messId",
 });
@@ -95,5 +272,9 @@ mess.hasOne(messAdmin, {
 
 module.exports ={
  mess,
- messAdmin
+ messAdmin,
+ messUser,
+ messAdminArchives,
+ messReview,
+ messAvailability
 }

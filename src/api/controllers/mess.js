@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { mess, messAdmin } = require("../models/mess");
+const { mess, messAdmin, messAdminArchives } = require("../models/mess");
 const { messAdminLogin } = require("./auth")
 const bcrypt = require('bcryptjs');
 
@@ -101,7 +101,51 @@ const createMessAdmin = catchAsync(async (req, res) => {
     }
 });
 
+const updateMessAdmin = catchAsync(async (req, res) => {
+    const admin = await messAdmin.findOne({ where: { email: req.body.email } });
+    if(!admin){
+        res.status(401).json({
+            message: "admin with that email not exits",
+        });
+    }else{
+        const body = req.body;
+        const data = await messAdmin.update({
+            name: body.name,
+            phno: body.phno,
+        });
+        res.send(data);
+    }
+});
 
+const getMessAdminArchives = catchAsync(async (req, res) => {
+    const data = await  messAdminArchives.findAll();
+    res.send(data);
+});
+
+const getMessAdminArchivesByMessId = catchAsync(async (req, res) => {
+    const data = await  messAdminArchives.findAll({ where: { messId: req.params.messId } });
+    res.send(data);
+});
+
+const createMessAdminArchives = catchAsync(async (req, res) => {
+    const admin = await messAdminArchives.findOne({ where: { email: req.body.email } });
+    if(admin==null){
+        const body = req.body;
+        const data = await messAdminArchives.create({
+            name: body.name,
+            email: body.email,
+            phno: body.phno,
+            messId: body.messId,
+            fromDate: body.fromDate,
+            toDate: body.toDate
+        });
+        res.send(data);
+    }else{
+        res.status(401).json({
+            message: "admin with that email already exits",
+        });
+    }
+});
 
 module.exports = {
   getMessDetails,
@@ -112,5 +156,9 @@ module.exports = {
   getMessAdmin,
   createMessAdmin,
   AdminLogin,
-  getMessAdminByMessId
+  getMessAdminByMessId,
+  updateMessAdmin,
+  getMessAdminArchives,
+  createMessAdminArchives,
+  getMessAdminArchivesByMessId,
 };

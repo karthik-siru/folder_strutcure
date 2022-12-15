@@ -4,8 +4,13 @@ const {
     updateMessDetails,
     getMessDetails, 
     getMessDetailsByName, 
-    getMessDetailsByMessId
+    getMessDetailsByMessId,
+    createMessAdmin,
+    getMessAdmin,
+    AdminLogin,
+    getMessAdminByMessId
 } = require('../controllers/mess');
+const { studentAuth,messAdminAuth } = require("../middlewares/auth")
 const router = express.Router();
 
 
@@ -21,13 +26,17 @@ const router = express.Router();
 
 // mess table
 router.post('',createMess);
-router.post('/update',updateMessDetails);
-router.get('',getMessDetails);
-router.get('/messid/:messId',getMessDetailsByMessId);
-router.get('/name/:name',getMessDetailsByName);
+router.post('/update',messAdminAuth(),updateMessDetails);
+router.get('',studentAuth(), getMessDetails);
+router.get('/messid/:messId',studentAuth(), getMessDetailsByMessId);
+router.get('/name/:name',studentAuth(), getMessDetailsByName);
 
 
 //messadmin
+router.post('/messadmin/login',AdminLogin);
+router.post('/messadmin',createMessAdmin);
+router.get('/messadmin',studentAuth(), getMessAdmin);
+router.get('/messadmin/:messId',studentAuth(), getMessAdminByMessId);
 
 
 

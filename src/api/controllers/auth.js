@@ -10,18 +10,31 @@ const generateToken = async(id) =>{
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
 }
 
-const studentLogin = async(rollno,password)=>{
+const studentLogin = async(rollno,pswd)=>{
   const user = await student.findOne({ where: { rollno: rollno } });
   if(!user){
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Roll number not exist');
   }
-  if(!bcrypt.compare(password, user.password)){
+  if(!bcrypt.compare(pswd, user.pswd)){
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
   }
-  const token = generateToken(rollno);
-  user["token"]=token;
-  return user;
+  const token = await generateToken(rollno);
+  return {user,token};
 }
+
+const messAdminLogin = async(email,pswd)=>{
+  const admin = await messAdmin.findOne({ where: { email: email } });
+  if(!admin){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'email not exist');
+  }
+  if(!bcrypt.compare(pswd, admin.pswd)){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
+  }
+  const token = await generateToken(email);
+  console.log(token)
+  return {admin,token};
+}
+
 
 
 const logout = catchAsync(async (req, res) => {
@@ -43,4 +56,5 @@ module.exports = {
   logout,
   forgotPassword,
   resetPassword,
+  messAdminLogin
 };

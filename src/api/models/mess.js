@@ -54,7 +54,8 @@ messAdmin = db.define(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-    },email: {
+    },
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -66,6 +67,11 @@ messAdmin = db.define(
     },
     phno: {
       type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    messId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       unique: true,
     },

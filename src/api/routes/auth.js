@@ -13,7 +13,7 @@ const router = express.Router();
  *       200:
  *         description: user information
  */
-router.post('/login',login);
+//router.post('/login',authController.login);
 
 /**
  * @openapi
@@ -24,7 +24,7 @@ router.post('/login',login);
  *       200:
  *         description: user information
  */
-router.post('/logout', auth(), logout);
+//router.post('/logout', auth(), authController.logout);
 
 
 /**
@@ -36,7 +36,7 @@ router.post('/logout', auth(), logout);
  *       200:
  *         description: user information
  */
-router.post('/forgot-password', forgotPassword);
+//router.post('/forgot-password', authController.forgotPassword);
 
 /**
  * @openapi
@@ -47,6 +47,6 @@ router.post('/forgot-password', forgotPassword);
  *       200:
  *         description: user information
  */
-router.post('/reset-password', resetPassword);
+//router.post('/reset-password', authController.resetPassword);
 
 module.exports = router;

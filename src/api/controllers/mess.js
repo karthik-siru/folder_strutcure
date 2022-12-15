@@ -1,6 +1,5 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const messService  = require('../services/MessService');
 const { mess, messAdmin } = require("../models/mess");
 
 const getMessDetails = catchAsync(async (req, res) => {

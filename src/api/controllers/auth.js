@@ -1,38 +1,45 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const  authService = require('../services/AuthService');
+const { mess, messAdmin } = require("../models/mess");
+const student = require("../models/student");
+const  ApiError = require( '../utils/apiError');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
 
+const generateToken = async(id) =>{
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
+}
 
-const login = catchAsync(async (req, res) => {
-  const { id, password } = req.body;
-  //login
+const studentLogin = async(rollno,password)=>{
+  const user = await student.findOne({ where: { rollno: rollno } });
+  if(!user){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Roll number not exist');
+  }
+  if(!bcrypt.compare(password, user.password)){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
+  }
+  const token = generateToken(rollno);
+  user["token"]=token;
+  return user;
+}
 
-
-  //generate token
-
-  
-  res.send({ user, tokens });
-});
 
 const logout = catchAsync(async (req, res) => {
-  await authService.logout(req.body.refreshToken);
-  res.status(httpStatus.NO_CONTENT).send("success");
+  
 });
 
 
  const forgotPassword = catchAsync(async (req, res) => {
-  const resetPasswordToken = await tokenService.generateResetPasswordToken(req.body.email);
-  res.status(httpStatus.NO_CONTENT).send(resetPasswordToken);
+
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  await authService.resetPassword(req.query.token, req.body.password);
-  res.status(httpStatus.NO_CONTENT).send();
+
 });
 
 
 module.exports = {
-  login,
+  studentLogin,
   logout,
   forgotPassword,
   resetPassword,

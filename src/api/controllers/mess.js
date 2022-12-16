@@ -1,8 +1,11 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { mess, messAdmin, messAdminArchives } = require("../models/mess");
+const { mess, messAdmin, messAdminArchives, messUser, messReview, messAvailability } = require("../models/mess");
 const { messAdminLogin } = require("./auth")
 const bcrypt = require('bcryptjs');
+const date = new Date();
+const year = date.getFullYear();
+const month = date.getMonth() + 1;
 
 const getMessDetails = catchAsync(async (req, res) => {
     const data = await  mess.findAll();
@@ -31,11 +34,6 @@ const createMess = catchAsync(async (req, res) => {
             message: "mess with that already exits",
         });
     }
-});
-
-const getMessDetailsByName = catchAsync(async (req, res) => {
-    const data = await  mess.findOne({ where: { name: req.params.name } });
-    res.send(data);
 });
 
 const getMessDetailsByMessId = catchAsync(async (req, res) => {
@@ -147,10 +145,91 @@ const createMessAdminArchives = catchAsync(async (req, res) => {
     }
 });
 
+const getMessUser = catchAsync(async (req, res) => {
+    const data = await  messUser.findAll({where: {year:req.params.year, month:req.params.month }});
+    res.send(data);
+});
+
+const getMyMess = catchAsync(async (req, res) => {
+    const data = await  messUser.findAll({where: {studentId: req.params.studentId, year:req.params.year, month:req.params.month }});
+    res.send(data);
+});
+
+const getMessUserByMessId = catchAsync(async (req, res) => {
+    const data = await  messUser.findAll({ where: { messId: req.params.messId, year:req.params.year, month:req.params.month  } });
+    res.send(data);
+});
+
+const createMessUser = catchAsync(async (req, res) => {
+    const user = await messUser.findOne({ where: { messId: req.body.messId, studentId: req.body.studentId, year:year, month:month  } });
+    if(user==null){
+        const body = req.body;
+        const data = await messUser.create({
+            messId: body.messId,
+            studentId: body.studentId,
+            year: year,
+            month: month,
+        });
+        res.send(data);
+    }else{
+        res.status(401).json({
+            message: "Mess already allocated",
+        });
+    }
+});
+
+const updateMessUser = catchAsync(async (req, res) => {
+    const admin = await messAdmin.findOne({ where: { messId: req.body.messId, studentId: req.body.studentId, year:year, month:month  } });
+    if(!admin){
+        res.status(401).json({
+            message: "Mess not allocated",
+        });
+    }else{
+        const body = req.body;
+        const data = await messAdmin.update({
+            messId: body.messId,
+        });
+        res.send(data);
+    }
+});
+
+const createMessReview = catchAsync(async (req, res) => {
+    const user = await messUser.findOne({ where: { messId: req.body.messId, studentId: req.body.studentId, year:req.body.year, month:req.body.month  } });
+    if(user==null){
+        const body = req.body;
+        const data = await messUser.create({
+            messId: body.messId,
+            studentId: body.studentId,
+            year: body.year,
+            month: body.month,
+            quality : body.quality,
+            quantity : body.quantity,
+            taste: body.taste,
+            catering : body.catering,
+            hygieness: body.hygieness,
+            puntuality: body.puntuality,
+        });
+        res.send(data);
+    }else{
+        res.status(401).json({
+            message: "Review already done",
+        });
+    }
+});
+
+const getMessReview = catchAsync(async (req, res) => {
+    const data = await  messUser.findAll();
+    res.send(data);
+});
+
+const getMessReviewByMessId = catchAsync(async (req, res) => {
+    const data = await  messUser.findAll({ where: { messId: req.params.messId} });
+    res.send(data);
+});
+
 module.exports = {
   getMessDetails,
   getMessDetailsByMessId,
-  getMessDetailsByName,
   updateMessDetails,
   createMess,
   getMessAdmin,
@@ -161,4 +240,12 @@ module.exports = {
   getMessAdminArchives,
   createMessAdminArchives,
   getMessAdminArchivesByMessId,
+  getMessUser,
+  getMyMess,
+  getMessUserByMessId,
+  createMessUser,
+  updateMessUser,
+  createMessReview,
+  getMessReview,
+  getMessReviewByMessId
 };

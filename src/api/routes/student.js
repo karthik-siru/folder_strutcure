@@ -4,7 +4,7 @@ const router = express.Router();
 // middleware
 
 //controllers
-const StudentController = require("../controllers/StudentController");
+const StudentController = require("../controllers/student");
 
 router.post("/register", StudentController.registerStudent);
 

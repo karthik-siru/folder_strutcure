@@ -2,10 +2,25 @@ const express = require("express");
 const router = express.Router();
 
 // middleware
+const { getStudentById } = require("../middlewares/student");
 
 //controllers
-const StudentController = require("../controllers/student");
+const {
+  registerStudent,
+  forgotPassword,
+  changePassword,
+  getStudentByPartialName,
+  getStudentByRollno,
+} = require("../controllers/student");
 
-router.post("/register", StudentController.registerStudent);
+//params
+router.param("rollno", getStudentById);
+
+// routes
+router.post("/register", registerStudent);
+router.post("/forgot-password/:rollno", forgotPassword);
+router.post("/change-password/:rollno", changePassword);
+router.get("/get-student-by-rollno", getStudentByRollno);
+router.get("/get-student-by-partial-name", getStudentByPartialName);
 
 module.exports = router;

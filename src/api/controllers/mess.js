@@ -15,8 +15,8 @@ const year = date.getFullYear();
 const month = date.getMonth() + 1;
 
 const getMessDetails = catchAsync(async (req, res) => {
-    const data = await  mess.findAll();
-    res.send(data);
+  const data = await mess.findAll();
+  res.send(data);
 });
 
 const createMess = catchAsync(async (req, res) => {
@@ -44,33 +44,32 @@ const createMess = catchAsync(async (req, res) => {
 });
 
 const getMessDetailsByMessId = catchAsync(async (req, res) => {
-    const data = await  mess.findOne({ where: { messId: req.params.messId } });
-    res.send(data);
+  const data = await mess.findOne({ where: { messId: req.params.messId } });
+  res.send(data);
 });
 
 const updateMessDetails = catchAsync(async (req, res) => {
-    const body=req.body;
-    console.log(body)
-    const data = await mess.update(
-        {
-            name: body.name,
-            description: body.description,
-            isVeg: body.isVeg,
-            capacity: body.capacity,
-            boyCapacity: body.boyCapacity,
-            girlCapacity: body.girlCapacity,
-            menu: body.menu,
-            charges: body.charges
-        },
-        { where: { messId: body.messId } }
-    )
-    res.send(data);
+  const body = req.body;
+  console.log(body);
+  const data = await mess.update(
+    {
+      name: body.name,
+      description: body.description,
+      isVeg: body.isVeg,
+      capacity: body.capacity,
+      boyCapacity: body.boyCapacity,
+      girlCapacity: body.girlCapacity,
+      menu: body.menu,
+      charges: body.charges,
+    },
+    { where: { messId: body.messId } }
+  );
+  res.send(data);
 });
 
-
 const getMessAdmin = catchAsync(async (req, res) => {
-    const data = await  messAdmin.findAll();
-    res.send(data);
+  const data = await messAdmin.findAll();
+  res.send(data);
 });
 
 
@@ -81,8 +80,10 @@ const adminLogin = catchAsync(async (req, res) => {
 });
 
 const getMessAdminByMessId = catchAsync(async (req, res) => {
-    const data = await  messAdmin.findAll({ where: { messId: req.params.messId } });
-    res.send(data);
+  const data = await messAdmin.findAll({
+    where: { messId: req.params.messId },
+  });
+  res.send(data);
 });
 
 const createMessAdmin = catchAsync(async (req, res) => {
@@ -123,13 +124,15 @@ const updateMessAdmin = catchAsync(async (req, res) => {
 });
 
 const getMessAdminArchives = catchAsync(async (req, res) => {
-    const data = await  messAdminArchives.findAll();
-    res.send(data);
+  const data = await messAdminArchives.findAll();
+  res.send(data);
 });
 
 const getMessAdminArchivesByMessId = catchAsync(async (req, res) => {
-    const data = await  messAdminArchives.findAll({ where: { messId: req.params.messId } });
-    res.send(data);
+  const data = await messAdminArchives.findAll({
+    where: { messId: req.params.messId },
+  });
+  res.send(data);
 });
 
 const createMessAdminArchives = catchAsync(async (req, res) => {
@@ -153,18 +156,32 @@ const createMessAdminArchives = catchAsync(async (req, res) => {
 });
 
 const getMessUser = catchAsync(async (req, res) => {
-    const data = await  messUser.findAll({where: {year:req.params.year, month:req.params.month }});
-    res.send(data);
+  const data = await messUser.findAll({
+    where: { year: req.params.year, month: req.params.month },
+  });
+  res.send(data);
 });
 
 const getMyMess = catchAsync(async (req, res) => {
-    const data = await  messUser.findAll({where: {studentId: req.params.studentId, year:req.params.year, month:req.params.month }});
-    res.send(data);
+  const data = await messUser.findAll({
+    where: {
+      studentId: req.params.studentId,
+      year: req.params.year,
+      month: req.params.month,
+    },
+  });
+  res.send(data);
 });
 
 const getMessUserByMessId = catchAsync(async (req, res) => {
-    const data = await  messUser.findAll({ where: { messId: req.params.messId, year:req.params.year, month:req.params.month  } });
-    res.send(data);
+  const data = await messUser.findAll({
+    where: {
+      messId: req.params.messId,
+      year: req.params.year,
+      month: req.params.month,
+    },
+  });
+  res.send(data);
 });
 
 const createMessUser = catchAsync(async (req, res) => {
@@ -254,5 +271,5 @@ module.exports = {
   updateMessUser,
   createMessReview,
   getMessReview,
-  getMessReviewByMessId
+  getMessReviewByMessId,
 };

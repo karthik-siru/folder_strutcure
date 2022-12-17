@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { mess, messAdmin } = require("../models/mess");
+const { messAdmin } = require("../models/mess");
+const { hostelAdmin,hostelWarden,careTaker } = require("../models/hostel")
 const student = require("../models/student");
 const  ApiError = require( '../utils/apiError');
 const bcrypt = require('bcryptjs');
@@ -35,6 +36,44 @@ const messAdminLogin = async(email,pswd)=>{
   return {admin,token};
 }
 
+const hostelAdminLogin = async(email,pswd)=>{
+  const admin = await hostelAdmin.findOne({ where: { email: email } });
+  if(!admin){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'email not exist');
+  }
+  if(!bcrypt.compare(pswd, admin.pswd)){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
+  }
+  const token = await generateToken(email);
+  console.log(token)
+  return {admin,token};
+}
+
+const hostelWardenLogin = async(email,pswd)=>{
+  const admin = await hostelWarden.findOne({ where: { email: email } });
+  if(!admin){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'email not exist');
+  }
+  if(!bcrypt.compare(pswd, admin.pswd)){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
+  }
+  const token = await generateToken(email);
+  console.log(token)
+  return {admin,token};
+}
+
+const careTakerLogin = async(email,pswd)=>{
+  const admin = await careTaker.findOne({ where: { email: email } });
+  if(!admin){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'email not exist');
+  }
+  if(!bcrypt.compare(pswd, admin.pswd)){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
+  }
+  const token = await generateToken(email);
+  console.log(token)
+  return {admin,token};
+}
 
 
 const logout = catchAsync(async (req, res) => {
@@ -56,5 +95,8 @@ module.exports = {
   logout,
   forgotPassword,
   resetPassword,
-  messAdminLogin
+  messAdminLogin,
+  hostelAdminLogin,
+  hostelWardenLogin,
+  careTakerLogin
 };

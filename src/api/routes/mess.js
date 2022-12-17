@@ -5,8 +5,9 @@ const {
     getMessDetails, 
     getMessDetailsByMessId,
     createMessAdmin,
+    updateMessAdmin,
     getMessAdmin,
-    AdminLogin,
+    adminLogin,
     getMessAdminByMessId,
     createMessAdminArchives,
     getMessAdminArchives,
@@ -37,30 +38,31 @@ const router = express.Router();
 router.post('',createMess);
 router.post('/update',messAdminAuth(),updateMessDetails);
 router.get('',studentAuth(), getMessDetails);
-router.get('/messid/:messId',studentAuth(), getMessDetailsByMessId);
+router.get('/:messId',studentAuth(), getMessDetailsByMessId);
 
 
-//messadmin
-router.post('/messadmin/login',AdminLogin);
-router.post('/messadmin',createMessAdmin);
-router.get('/messadmin',studentAuth(), getMessAdmin);
-router.get('/messadmin/:messId',studentAuth(), getMessAdminByMessId);
+//mess-admin
+router.post('/mess-admin/login',adminLogin);
+router.post('/mess-admin',createMessAdmin);
+router.post('/mess-admin/update',updateMessAdmin);
+router.get('/mess-admin',studentAuth(), getMessAdmin);
+router.get('/mess-admin/:messId',studentAuth(), getMessAdminByMessId);
 
-//messadminarchives
-router.post('/messadminarchives',createMessAdminArchives);
-router.get('/messadminarchives',messAdminAuth(), getMessAdminArchives);
-router.get('/messadminarchives/:messId',messAdminAuth(), getMessAdminArchivesByMessId);
+//mess-admin-archives
+router.post('/mess-admin-archives',createMessAdminArchives);
+router.get('/mess-admin-archives',messAdminAuth(), getMessAdminArchives);
+router.get('/mess-admin-archives/:messId',messAdminAuth(), getMessAdminArchivesByMessId);
 
-//messuser
-router.post('/messuser',studentAuth(),createMessUser);
-router.get('/mymess/:year/:month',studentAuth(),getMyMess);
-router.get('/messuser/:year/:month', getMessUser);
-router.get('/messuser/:messId/:year/:month', getMessUserByMessId);
+//mess-user
+router.post('/mess-user',studentAuth(),createMessUser);
+router.get('/my-mess/:studentId/:year/:month',studentAuth(),getMyMess);
+router.get('/mess-user/:year/:month', getMessUser);
+router.get('/mess-user/:messId/:year/:month', getMessUserByMessId);
 
-//messreview
-router.post('/messreview',studentAuth(),createMessReview);
-router.get('/messreview',studentAuth(), getMessReview);
-router.get('/messreview/:messId',studentAuth(), getMessReviewByMessId);
+//mess-review
+router.post('/mess-review',studentAuth(),createMessReview);
+router.get('/mess-review',studentAuth(), getMessReview);
+router.get('/mess-review/:messId',studentAuth(), getMessReviewByMessId);
 
 module.exports = router;
 

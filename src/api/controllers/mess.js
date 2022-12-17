@@ -1,6 +1,13 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { mess, messAdmin, messAdminArchives, messUser, messReview, messAvailability } = require("../models/mess");
+const { 
+    mess, 
+    messAdmin, 
+    messAdminArchives, 
+    messUser, 
+    messReview, 
+    messAvailability 
+} = require("../models/mess");
 const { messAdminLogin } = require("./auth")
 const bcrypt = require('bcryptjs');
 const date = new Date();
@@ -31,7 +38,7 @@ const createMess = catchAsync(async (req, res) => {
         res.send(data);
     }else{
         res.status(401).json({
-            message: "mess with that already exits",
+            err: "mess with that already exits",
         });
     }
 });
@@ -67,7 +74,7 @@ const getMessAdmin = catchAsync(async (req, res) => {
 });
 
 
-const AdminLogin = catchAsync(async (req, res) => {
+const adminLogin = catchAsync(async (req, res) => {
     console.log(req.body)
     const data=await messAdminLogin(req.body.email,req.body.pswd);
     res.send(data);
@@ -94,7 +101,7 @@ const createMessAdmin = catchAsync(async (req, res) => {
         res.send(data);
     }else{
         res.status(401).json({
-            message: "admin with that email already exits",
+            err: "admin with that email already exits",
         });
     }
 });
@@ -103,7 +110,7 @@ const updateMessAdmin = catchAsync(async (req, res) => {
     const admin = await messAdmin.findOne({ where: { email: req.body.email } });
     if(!admin){
         res.status(401).json({
-            message: "admin with that email not exits",
+            err: "admin with that email not exits",
         });
     }else{
         const body = req.body;
@@ -140,7 +147,7 @@ const createMessAdminArchives = catchAsync(async (req, res) => {
         res.send(data);
     }else{
         res.status(401).json({
-            message: "admin with that email already exits",
+            err: "admin with that email already exits",
         });
     }
 });
@@ -173,7 +180,7 @@ const createMessUser = catchAsync(async (req, res) => {
         res.send(data);
     }else{
         res.status(401).json({
-            message: "Mess already allocated",
+            err: "Mess already allocated",
         });
     }
 });
@@ -182,7 +189,7 @@ const updateMessUser = catchAsync(async (req, res) => {
     const admin = await messAdmin.findOne({ where: { messId: req.body.messId, studentId: req.body.studentId, year:year, month:month  } });
     if(!admin){
         res.status(401).json({
-            message: "Mess not allocated",
+            err: "Mess not allocated",
         });
     }else{
         const body = req.body;
@@ -194,10 +201,10 @@ const updateMessUser = catchAsync(async (req, res) => {
 });
 
 const createMessReview = catchAsync(async (req, res) => {
-    const user = await messUser.findOne({ where: { messId: req.body.messId, studentId: req.body.studentId, year:req.body.year, month:req.body.month  } });
+    const user = await messReview.findOne({ where: { messId: req.body.messId, studentId: req.body.studentId, year:req.body.year, month:req.body.month  } });
     if(user==null){
         const body = req.body;
-        const data = await messUser.create({
+        const data = await messReview.create({
             messId: body.messId,
             studentId: body.studentId,
             year: body.year,
@@ -212,18 +219,18 @@ const createMessReview = catchAsync(async (req, res) => {
         res.send(data);
     }else{
         res.status(401).json({
-            message: "Review already done",
+            err: "Review already done",
         });
     }
 });
 
 const getMessReview = catchAsync(async (req, res) => {
-    const data = await  messUser.findAll();
+    const data = await  messReview.findAll();
     res.send(data);
 });
 
 const getMessReviewByMessId = catchAsync(async (req, res) => {
-    const data = await  messUser.findAll({ where: { messId: req.params.messId} });
+    const data = await  messReview.findAll({ where: { messId: req.params.messId} });
     res.send(data);
 });
 
@@ -234,7 +241,7 @@ module.exports = {
   createMess,
   getMessAdmin,
   createMessAdmin,
-  AdminLogin,
+  adminLogin,
   getMessAdminByMessId,
   updateMessAdmin,
   getMessAdminArchives,

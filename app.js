@@ -45,12 +45,12 @@ app.use((err, req, res, next) => {
     const apiError = err;
     return res.status(apiError.statusCode).json({
       status: apiError.status,
-      message: apiError.message,
+      err: apiError.message,
     });
   }
   return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
     status: httpStatus.INTERNAL_SERVER_ERROR,
-    message: err.message,
+    err: err.message,
   });
 });
 
@@ -59,7 +59,7 @@ app.use((err, req, res, next) => {
   console.error(err);
   return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
     status: httpStatus.INTERNAL_SERVER_ERROR,
-    message: err.message,
+    err: err.message,
   });
 });
 

@@ -71,11 +71,6 @@ const messAdmin = db.define(
       allowNull: false,
       unique: true,
     },
-    messId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      unique: true,
-    },
   },
   {
     timestamps:true,
@@ -93,16 +88,6 @@ mess.hasOne(messAdmin, {
 const messUser = db.define(
   "messUser",
   {
-    studentId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    messId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
     month: {
       type: DataTypes.INTEGER,
     },
@@ -117,6 +102,7 @@ const messUser = db.define(
     tableName: "messUser",
   }
 );
+
 
 mess.hasMany(messUser, {
   foreignKey: "messId",
@@ -147,11 +133,6 @@ const messAdminArchives = db.define(
       allowNull: false,
       unique: true,
     },
-    messId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      unique: true,
-    },
     fromDate:{
       type: DataTypes.DATEONLY,
     },
@@ -173,18 +154,8 @@ mess.hasMany(messAdminArchives, {
 });
 
 const messReview = db.define(
-  "messAdminArchives",
+  "messReview",
   {
-    studentId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    messId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
     quality: {
       type: DataTypes.INTEGER,
     },
@@ -233,13 +204,8 @@ student.hasMany(messReview,{
 });
 
 const messAvailability = db.define(
-  "mess",
+  "messAvailability",
   {
-    messId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      unique: true,
-    },
     boysCount: {
       type: DataTypes.INTEGER,
     },

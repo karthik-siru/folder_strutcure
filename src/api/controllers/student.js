@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 var crypto = require("crypto");
 const { Op } = require("sequelize");
-
+const {studentLogin} = require("./auth")
 // setup to send mail
 var transporter = nodemailer.createTransport({
   service: "gmail",
@@ -39,19 +39,32 @@ exports.registerStudent = async (req, res) => {
       });
       newStudent.pswd = null;
       res.status(200).json({
-        student: newStudent,
+        data: newStudent,
       });
     } else {
       res.status(401).json({
-        message: "student with this roll no already exits",
+        err: "student with this roll no already exits",
       });
     }
   } catch (error) {
     res.status(401).json({
-      message: "unable to register Student",
+      err: "unable to register Student",
     });
   }
 };
+
+exports.Login = async (req, res) => {
+  try {
+    const data=await studentLogin(req.body.rollno,req.body.pswd);
+    res.status(200).json({
+      data: data,
+    });
+  }catch (error){
+    res.status(401).json({
+      err: "Incorrect Rollno or password",
+    });
+  }
+}
 
 exports.forgotPassword = async (req, res) => {
   try {
@@ -144,27 +157,28 @@ exports.getStudentByRollno = async (req, res) => {
     const { rollno } = req.body;
     const data = await student.findOne({ where: { rollno: rollno } });
     res.status(200).json({
-      message: data,
+      data: data,
     });
   } catch (error) {
     res.status(401).json({
-      message: "Unable to get student details",
+      err: "Unable to get student details",
     });
   }
 };
 
 exports.getStudentByPartialName = async (req, res) => {
   try {
-    const { partialName } = req.body;
+    const { name } = req.body;
+    console.log(name)
     const data = student.findAll({
       where: {
         name: {
-          [Op.substring]: partialName,
+          [Op.substring]: name,
         },
       },
     });
     res.status(200).json({
-      message: data,
+      data: data,
     });
   } catch (error) {
     res.status(401).json({

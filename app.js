@@ -41,6 +41,8 @@ app.use((req, res, next) => {
 
 // convert error to ApiError before sending back to client
 app.use((err, req, res, next) => {
+  console.log("err")
+  console.log(err)
   if (err instanceof ApiError) {
     const apiError = err;
     return res.status(apiError.statusCode).json({
@@ -56,6 +58,7 @@ app.use((err, req, res, next) => {
 
 // handle error
 app.use((err, req, res, next) => {
+  console.log("err")
   console.error(err);
   return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
     status: httpStatus.INTERNAL_SERVER_ERROR,

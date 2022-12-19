@@ -17,13 +17,11 @@ const studentAuth = () => async (req, res, next) => {
       next()
     } catch (error) {
       console.error(error)
-      res.status(401)
-      throw new Error('Not authorized, token failed')
+      throw new ApiError(httpStatus.UNAUTHORIZED, "Not authorized, token failed");
     }
   }
   if (!token) {
-    res.status(401)
-    throw new Error('Not authorized, no token')
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Not authorized, no token");
   }
 };
 

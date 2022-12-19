@@ -12,15 +12,16 @@ const generateToken = async (id) => {
 };
 
 const studentLogin = async (rollno, pswd) => {
-  const user = await student.findOne({ where: { rollno: rollno } });
-  if (!user) {
+  const data = await student.findOne({ where: { rollno: rollno } });
+  if (!data) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Roll number not exist");
   }
-  if (!bcrypt.compare(pswd, user.pswd)) {
+  if (!bcrypt.compare(pswd, data.pswd)) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect password");
   }
   const token = await generateToken(rollno);
-  return { user, token };
+  data.dataValues["token"]=token
+  return data;
 };
 
 const messAdminLogin = async (email, pswd) => {

@@ -221,7 +221,7 @@ exports.getAllStudents = async (req, res) => {
   try {
     const data = await student.findAll();
     res.status(200).json({
-      message: data,
+      data: data,
     });
   } catch (error) {
     res.status(401).json({

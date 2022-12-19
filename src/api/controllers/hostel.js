@@ -26,7 +26,6 @@ const getHostelDetails = catchAsync(async (req, res) => {
 });
 
 const createHostel = catchAsync(async (req, res) => {
-    console.log(req.body)
     const hostelData = await hostel.findOne({ where: { hostelId: req.body.hostelId } });
     if(hostelData==null){
         const body = req.body;
@@ -53,7 +52,6 @@ const getHostelDetailsByHostelId = catchAsync(async (req, res) => {
 
 const updateHostelDetails = catchAsync(async (req, res) => {
     const body=req.body;
-    console.log(body)
     const data = await hostel.update(
         {
             name: body.name,
@@ -75,7 +73,6 @@ const getHostelAdmin = catchAsync(async (req, res) => {
 
 
 const adminLogin = catchAsync(async (req, res) => {
-    console.log(req.body)
     const data=await hostelAdminLogin(req.body.email,req.body.pswd);
     res.send(data);
 });
@@ -89,7 +86,6 @@ const createHostelAdmin = catchAsync(async (req, res) => {
     const admin = await hostelAdmin.findOne({ where: { email: req.body.email } });
     if(admin==null){
         const body = req.body;
-        console.log(body)
         const pswd = await bcrypt.hash(body.pswd,8);
         const data = await hostelAdmin.create({
             name: body.name,
@@ -207,7 +203,6 @@ const getHostelWarden = catchAsync(async (req, res) => {
 
 
 const wardenLogin = catchAsync(async (req, res) => {
-    console.log(req.body)
     const data=await hostelWardenLogin(req.body.email,req.body.pswd);
     res.send(data);
 });
@@ -221,7 +216,6 @@ const createHostelWarden = catchAsync(async (req, res) => {
     const warden = await hostelWarden.findOne({ where: { email: req.body.email } });
     if(warden==null){
         const body = req.body;
-        console.log(body)
         const pswd = await bcrypt.hash(body.pswd,8);
         const data = await hostelWarden.create({
             name: body.name,
@@ -289,7 +283,6 @@ const createHostelWardenArchives = catchAsync(async (req, res) => {
 
 
 const careTakerLogin_ = catchAsync(async (req, res) => {
-    console.log(req.body)
     const data=await careTakerLogin(req.body.email,req.body.pswd);
     res.send(data);
 });
@@ -308,7 +301,6 @@ const createCareTaker = catchAsync(async (req, res) => {
     const warden = await careTaker.findOne({ where: { email: req.body.email } });
     if(warden==null){
         const body = req.body;
-        console.log(body)
         const pswd = await bcrypt.hash(body.pswd,8);
         const data = await careTaker.create({
             name: body.name,

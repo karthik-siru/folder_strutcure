@@ -32,9 +32,9 @@ const messAdminLogin = async (email, pswd) => {
   if (!bcrypt.compare(pswd, admin.pswd)) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect password");
   }
-  const token = await generateToken(email);
-  console.log(token);
-  return { admin, token };
+  const token = await generateToken(rollno);
+  data.dataValues["token"]=token
+  return data;
 };
 
 const hostelAdminLogin = async(email,pswd)=>{
@@ -46,7 +46,6 @@ const hostelAdminLogin = async(email,pswd)=>{
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
   }
   const token = await generateToken(email);
-  console.log(token)
   return {admin,token};
 }
 
@@ -59,7 +58,6 @@ const hostelWardenLogin = async(email,pswd)=>{
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
   }
   const token = await generateToken(email);
-  console.log(token)
   return {admin,token};
 }
 
@@ -72,7 +70,6 @@ const careTakerLogin = async(email,pswd)=>{
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
   }
   const token = await generateToken(email);
-  console.log(token)
   return {admin,token};
 }
 

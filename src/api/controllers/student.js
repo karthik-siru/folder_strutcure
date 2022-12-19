@@ -118,7 +118,6 @@ exports.forgotPassword = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(401).json({
       err: "Unable to reset password",
     });
@@ -199,7 +198,6 @@ exports.getStudentByRollno = async (req, res) => {
 exports.getStudentByPartialName = async (req, res) => {
   try {
     const { name } = req.body;
-    console.log(name)
     const data = student.findAll({
       where: {
         name: {

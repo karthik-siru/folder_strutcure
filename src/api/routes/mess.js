@@ -16,6 +16,7 @@ const {
     getMyMess,
     getMessUserByMessId,
     createMessUser,
+    updateMessUser,
     createMessReview,
     getMessReview,
     getMessReviewByMessId
@@ -34,12 +35,6 @@ const router = express.Router();
  *         description: mess information
  */
 
-// mess table
-router.post('',createMess);
-router.post('/update',messAdminAuth(),updateMessDetails);
-router.get('',studentAuth(), getMessDetails);
-router.get('/:messId',studentAuth(), getMessDetailsByMessId);
-
 
 //mess-admin
 router.post('/mess-admin/login',adminLogin);
@@ -53,16 +48,24 @@ router.post('/mess-admin-archives',createMessAdminArchives);
 router.get('/mess-admin-archives',messAdminAuth(), getMessAdminArchives);
 router.get('/mess-admin-archives/:messId',messAdminAuth(), getMessAdminArchivesByMessId);
 
-//mess-user
 router.post('/mess-user',studentAuth(),createMessUser);
-router.get('/my-mess/:studentId/:year/:month',studentAuth(),getMyMess);
+router.post('/mess-user/update',studentAuth(),updateMessUser);
+router.get('/mess-user/:studentId/:year/:month',studentAuth(),getMyMess);
 router.get('/mess-user/:year/:month', getMessUser);
-router.get('/mess-user/:messId/:year/:month', getMessUserByMessId);
+router.get('/mess-user-byid/:messId/:year/:month', getMessUserByMessId);
 
 //mess-review
 router.post('/mess-review',studentAuth(),createMessReview);
 router.get('/mess-review',studentAuth(), getMessReview);
 router.get('/mess-review/:messId',studentAuth(), getMessReviewByMessId);
+
+// mess table
+router.post('',createMess);
+router.post('/update',messAdminAuth(),updateMessDetails);
+router.get('',studentAuth(), getMessDetails);
+router.get('/:messId',studentAuth(), getMessDetailsByMessId);
+
+//mess-user
 
 module.exports = router;
 

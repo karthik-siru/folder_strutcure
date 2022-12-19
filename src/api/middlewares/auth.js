@@ -13,15 +13,24 @@ const studentAuth = () => async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1]
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
-      req.user = await student.findOne({ where: { rollno: decoded.id } })
-      next()
+      data = await student.findOne({ where: { rollno: decoded.id } })
+      data = data || await messAdmin.findOne({ where: { email: decoded.id } })
+      if(data) next()
+      else{
+        res.status(401).json({
+          err:"Not authorized, token failed"
+        })
+      }
     } catch (error) {
-      console.error(error)
-      throw new ApiError(httpStatus.UNAUTHORIZED, "Not authorized, token failed");
+      res.status(401).json({
+        err:"Not authorized, token failed"
+      })
     }
   }
   if (!token) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, "Not authorized, no token");
+    res.status(401).json({
+      err:"Not authorized, no token"
+    })
   }
 };
 
@@ -34,17 +43,23 @@ const messAdminAuth = () => async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1]
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
-      req.user = await messAdmin.findOne({ where: { email: decoded.id } })
-      next()
+      const data = await messAdmin.findOne({ where: { email: decoded.id } })
+      if(data) next()
+      else{
+        res.status(401).json({
+          err:"Not authorized, token failed"
+        })
+      }
     } catch (error) {
-      console.error(error)
-      res.status(401)
-      throw new Error('Not authorized, token failed')
+      res.status(401).json({
+        err:"Not authorized, token failed"
+      })
     }
   }
   if (!token) {
-    res.status(401)
-    throw new Error('Not authorized, no token')
+    res.status(401).json({
+      err:"Not authorized, no token"
+    })
   }
 };
 

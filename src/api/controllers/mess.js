@@ -11,16 +11,27 @@ const {
 const { messAdminLogin } = require("./auth")
 const bcrypt = require('bcryptjs');
 const date = new Date();
-const year = date.getFullYear();
-const month = date.getMonth() + 1;
+let year = date.getFullYear();
+let month = date.getMonth() + 1;
+const day = date.getDate()
+if(day>=25) {
+  if(month==12){
+    month=1;
+    year+=1;
+  }else{
+    month+=1;
+  }
+}
+
 
 const getMessDetails = catchAsync(async (req, res) => {
   const data = await mess.findAll();
-  res.send(data);
+  res.status(200).json({
+      data: data,
+  });
 });
 
 const createMess = catchAsync(async (req, res) => {
-    console.log(req.body)
     const messData = await mess.findOne({ where: { messId: req.body.messId } });
     if(messData==null){
         const body = req.body;
@@ -35,22 +46,25 @@ const createMess = catchAsync(async (req, res) => {
             menu: body.menu,
             charges: body.charges
         });
-        res.send(data);
+        res.status(200).json({
+          data: data,
+        });
     }else{
         res.status(401).json({
-            err: "mess with that already exits",
+            err: "mess with that id already exits",
         });
     }
 });
 
 const getMessDetailsByMessId = catchAsync(async (req, res) => {
   const data = await mess.findOne({ where: { messId: req.params.messId } });
-  res.send(data);
+  res.status(200).json({
+      data: data,
+  });
 });
 
 const updateMessDetails = catchAsync(async (req, res) => {
   const body = req.body;
-  console.log(body);
   const data = await mess.update(
     {
       name: body.name,
@@ -64,33 +78,38 @@ const updateMessDetails = catchAsync(async (req, res) => {
     },
     { where: { messId: body.messId } }
   );
-  res.send(data);
+  if(data[0]) res.status(200).json({message: "successfully updated"});
+  else res.status(401).json({err: "mess with that messId not exists"});
 });
 
 const getMessAdmin = catchAsync(async (req, res) => {
   const data = await messAdmin.findAll();
-  res.send(data);
+  res.status(200).json({
+      data: data,
+  });
 });
 
 
 const adminLogin = catchAsync(async (req, res) => {
-    console.log(req.body)
     const data=await messAdminLogin(req.body.email,req.body.pswd);
-    res.send(data);
+    res.status(200).json({
+      data: data,
+    });
 });
 
 const getMessAdminByMessId = catchAsync(async (req, res) => {
-  const data = await messAdmin.findAll({
+  const data = await messAdmin.findOne({
     where: { messId: req.params.messId },
   });
-  res.send(data);
+  res.status(200).json({
+      data: data,
+  });
 });
 
 const createMessAdmin = catchAsync(async (req, res) => {
     const admin = await messAdmin.findOne({ where: { email: req.body.email } });
     if(admin==null){
         const body = req.body;
-        console.log(body)
         const pswd = await bcrypt.hash(body.pswd,8);
         const data = await messAdmin.create({
             name: body.name,
@@ -99,7 +118,9 @@ const createMessAdmin = catchAsync(async (req, res) => {
             phno: body.phno,
             messId: body.messId
         });
-        res.send(data);
+        res.status(200).json({
+          data: data,
+        });
     }else{
         res.status(401).json({
             err: "admin with that email already exits",
@@ -108,31 +129,30 @@ const createMessAdmin = catchAsync(async (req, res) => {
 });
 
 const updateMessAdmin = catchAsync(async (req, res) => {
-    const admin = await messAdmin.findOne({ where: { email: req.body.email } });
-    if(!admin){
-        res.status(401).json({
-            err: "admin with that email not exits",
-        });
-    }else{
-        const body = req.body;
-        const data = await messAdmin.update({
-            name: body.name,
-            phno: body.phno,
-        });
-        res.send(data);
-    }
+  const body = req.body;
+  const data = await messAdmin.update({
+      name: body.name,
+      phno: body.phno,
+  },
+  { where: { email: req.body.email } });
+  if(data[0]) res.status(200).json({message: "successfully updated"});
+  else res.status(401).json({err: "Admin with that email not exists"});
 });
 
 const getMessAdminArchives = catchAsync(async (req, res) => {
   const data = await messAdminArchives.findAll();
-  res.send(data);
+  res.status(200).json({
+      data: data,
+  });
 });
 
 const getMessAdminArchivesByMessId = catchAsync(async (req, res) => {
   const data = await messAdminArchives.findAll({
     where: { messId: req.params.messId },
   });
-  res.send(data);
+  res.status(200).json({
+      data: data,
+  });
 });
 
 const createMessAdminArchives = catchAsync(async (req, res) => {
@@ -147,7 +167,9 @@ const createMessAdminArchives = catchAsync(async (req, res) => {
             fromDate: body.fromDate,
             toDate: body.toDate
         });
-        res.send(data);
+        res.status(200).json({
+      data: data,
+  });
     }else{
         res.status(401).json({
             err: "admin with that email already exits",
@@ -159,18 +181,22 @@ const getMessUser = catchAsync(async (req, res) => {
   const data = await messUser.findAll({
     where: { year: req.params.year, month: req.params.month },
   });
-  res.send(data);
+  res.status(200).json({
+      data: data,
+  });
 });
 
 const getMyMess = catchAsync(async (req, res) => {
-  const data = await messUser.findAll({
+  const data = await messUser.findOne({
     where: {
       studentId: req.params.studentId,
       year: req.params.year,
       month: req.params.month,
     },
   });
-  res.send(data);
+  res.status(200).json({
+      data: data,
+  });
 });
 
 const getMessUserByMessId = catchAsync(async (req, res) => {
@@ -181,11 +207,13 @@ const getMessUserByMessId = catchAsync(async (req, res) => {
       month: req.params.month,
     },
   });
-  res.send(data);
+  res.status(200).json({
+      data: data,
+  });
 });
 
 const createMessUser = catchAsync(async (req, res) => {
-    const user = await messUser.findOne({ where: { messId: req.body.messId, studentId: req.body.studentId, year:year, month:month  } });
+    const user = await messUser.findOne({ where: {studentId: req.body.studentId, year:year, month:month  } });
     if(user==null){
         const body = req.body;
         const data = await messUser.create({
@@ -194,7 +222,10 @@ const createMessUser = catchAsync(async (req, res) => {
             year: year,
             month: month,
         });
-        res.send(data);
+        res.status(200).json({
+          data: data,
+          message:"successfully updated"
+        });
     }else{
         res.status(401).json({
             err: "Mess already allocated",
@@ -203,7 +234,12 @@ const createMessUser = catchAsync(async (req, res) => {
 });
 
 const updateMessUser = catchAsync(async (req, res) => {
-    const admin = await messAdmin.findOne({ where: { messId: req.body.messId, studentId: req.body.studentId, year:year, month:month  } });
+  if(day<25){
+    res.status(401).json({
+      err: "update not possible",
+    });
+  }
+    const admin = await messAdmin.findOne({ where: {studentId: req.body.studentId, year:year, month:month  } });
     if(!admin){
         res.status(401).json({
             err: "Mess not allocated",
@@ -213,7 +249,8 @@ const updateMessUser = catchAsync(async (req, res) => {
         const data = await messAdmin.update({
             messId: body.messId,
         });
-        res.send(data);
+        if(data[0]) res.status(200).json({message: "successfully updated"});
+        else res.status(401).json({err: "not updated"});
     }
 });
 
@@ -233,7 +270,9 @@ const createMessReview = catchAsync(async (req, res) => {
             hygieness: body.hygieness,
             puntuality: body.puntuality,
         });
-        res.send(data);
+        res.status(200).json({
+            data: data,
+        });
     }else{
         res.status(401).json({
             err: "Review already done",
@@ -243,12 +282,16 @@ const createMessReview = catchAsync(async (req, res) => {
 
 const getMessReview = catchAsync(async (req, res) => {
     const data = await  messReview.findAll();
-    res.send(data);
+    res.status(200).json({
+      data: data,
+  });
 });
 
 const getMessReviewByMessId = catchAsync(async (req, res) => {
     const data = await  messReview.findAll({ where: { messId: req.params.messId} });
-    res.send(data);
+    res.status(200).json({
+      data: data,
+  });
 });
 
 module.exports = {

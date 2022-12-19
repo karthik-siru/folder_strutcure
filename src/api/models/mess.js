@@ -120,7 +120,6 @@ const messAdminArchives = db.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -161,10 +160,6 @@ const messReview = db.define(
     },
     quantity: {
       type: DataTypes.INTEGER,
-    },
-    pswd: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
     taste: {
       type: DataTypes.INTEGER,

@@ -39,23 +39,23 @@ exports.registerStudent = async (req, res) => {
       });
       newStudent.pswd = null;
       res.status(200).json({
-        student: newStudent,
+        message: "Registration Successfull",
+        data: newStudent,
       });
     } else {
       res.status(401).json({
-        message: "student with this roll no already exits",
+        err: "student with this roll no already exits",
       });
     }
   } catch (error) {
     res.status(401).json({
-      message: "unable to register Student",
+      err: "unable to register Student",
     });
   }
 };
 
 exports.forgotPassword = async (req, res) => {
   try {
-    const { rollno } = req.student.rollno;
     const Student = req.student;
 
     if (Student === null) {
@@ -63,41 +63,49 @@ exports.forgotPassword = async (req, res) => {
         err: `No user found with roll no : ${rollno} `,
       });
     } else {
+      const rollno = Student.rollno;
       const studentEmail = Student.email;
       const studentName = Student.name;
       const password = crypto.randomBytes(5).toString("hex");
       var encryptedPassword = await bcrypt.hash(password, 8);
-      await Student.update(
-        { rollno: rollno },
-        {
-          where: {
-            pswd: encryptedPassword,
-          },
-        }
-      );
 
-      var mailOptions = {
-        from: process.env.MAIL,
-        to: studentEmail,
-        subject: "Your New Password for Hostels-NITC Website",
-        html: `<h1>Hi ${studentName}</h1>
-        <h2>Your New Password is </h2><br /><p><b>${password}</b></p><br />
-        <p>Please Change the Password once you login into Website .. else You can use the Same </p>
-        <p>This is a system generated Email .. pls Don't Reply</p>
-        <p>Hostels-Website .NITC </p>`,
-      };
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Email sent: " + info.response);
+      // how to update -> get an instance and then update
+
+      await student.findOne({ where: { rollno: rollno } }).then((record) => {
+        if (!record) {
           res.status(200).json({
-            message: `Please Login using the New password sent to your mail : ${studentEmail}`,
+            err: "No User Found",
+          });
+        } else {
+          record.update({ pswd: encryptedPassword }).then((updatedRecord) => {
+            // mail options
+            var mailOptions = {
+              from: process.env.MAIL,
+              to: studentEmail,
+              subject: "Your New Password for Hostels-NITC Website",
+              html: `<h1>Hi ${studentName}</h1>
+              <h2>Your New Password is </h2><br /><p><b>${password}</b></p><br />
+              <p>Please Change the Password once you login into Website .. else You can use the Same </p>
+              <p>This is a system generated Email .. pls Don't Reply</p>
+              <p>Hostels-Website .NITC </p>`,
+            };
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log("Email sent: " + info.response);
+                res.status(200).json({
+                  message: `Please Login using the New password sent to your mail : ${studentEmail}`,
+                  data: updatedRecord,
+                });
+              }
+            });
           });
         }
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(401).json({
       err: "Unable to reset password",
     });
@@ -108,28 +116,50 @@ exports.changePassword = async (req, res) => {
   try {
     const { newPassword, currPassword } = req.body;
     const Student = req.student;
+    const { rollno, pswd, name, email } = Student;
 
-    console.log(newPassword, currPassword, Student);
+    if (await bcrypt.compare(currPassword, pswd)) {
+      const newEncryptedPassword = await bcrypt.hash(newPassword, 8);
 
-    const { rollno, email, pswd } = Student;
-    if (!bcrypt.compare(pswd, currPassword)) {
+      await student.findOne({ where: { rollno: rollno } }).then((record) => {
+        if (!record) {
+          res.status(200).json({
+            err: "No User Found",
+          });
+        } else {
+          record
+            .update({ pswd: newEncryptedPassword })
+            .then((updatedRecord) => {
+              // mail options
+              var mailOptions = {
+                from: process.env.MAIL,
+                to: email,
+                subject: "Password Changed for Hostels-NITC Website",
+                html: `<h1>Hi ${name}</h1>
+              <p>Your Password is <b>Changed</b> successfully .</p><br /><br />
+              <p>If Not You ... Please Go to Hostels-NITC Website and Forgot Password </p><br/>
+              <p> We will send you a new Password to login </p> 
+              <p>This is a system generated Email .. pls Don't Reply</p>
+              <p>Hostels-Website .NITC </p>`,
+              };
+              transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log("Email sent: " + info.response);
+                  res.status(200).json({
+                    message: `Password Changed Successfully`,
+                    data: updatedRecord,
+                  });
+                }
+              });
+            });
+        }
+      });
+    } else {
       res.status(401).json({
         err: "Check your Current Password",
       });
-    } else {
-      const newEncryptedPassword = await bcrypt.hash(newPassword, 8);
-      await Student.update(
-        { rollno: rollno },
-        {
-          where: {
-            pswd: newEncryptedPassword,
-          },
-        }
-      ).then(
-        res.status(200).json({
-          message: "Password Changed Successfully",
-        })
-      );
     }
   } catch (error) {
     console.log(error);
@@ -169,6 +199,19 @@ exports.getStudentByPartialName = async (req, res) => {
   } catch (error) {
     res.status(401).json({
       err: "Unable to get Student Names",
+    });
+  }
+};
+
+exports.getAllStudents = async (req, res) => {
+  try {
+    const data = await student.findAll();
+    res.status(200).json({
+      message: data,
+    });
+  } catch (error) {
+    res.status(401).json({
+      err: "Unable to fetch all student details",
     });
   }
 };

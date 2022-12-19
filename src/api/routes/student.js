@@ -11,6 +11,7 @@ const {
   changePassword,
   getStudentByPartialName,
   getStudentByRollno,
+  getAllStudents,
 } = require("../controllers/student");
 
 //params
@@ -22,5 +23,6 @@ router.post("/forgot-password/:rollno", forgotPassword);
 router.post("/change-password/:rollno", changePassword);
 router.get("/get-student-by-rollno", getStudentByRollno);
 router.get("/get-student-by-partial-name", getStudentByPartialName);
+router.get("/get-all-students", getAllStudents);
 
 module.exports = router;

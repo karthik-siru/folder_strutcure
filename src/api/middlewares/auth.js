@@ -14,7 +14,7 @@ const studentAuth = () => async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1]
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
       data = await student.findOne({ where: { rollno: decoded.id } })
-      data = data || await messAdmin.findOne({ where: { email: decoded.id } })
+      //data = data || await messAdmin.findOne({ where: { email: decoded.id } })
       if(data) next()
       else{
         res.status(401).json({

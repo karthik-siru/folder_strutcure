@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 var crypto = require("crypto");
 const { Op } = require("sequelize");
-const {studentLogin} = require("./auth")
+const { studentLogin } = require("./auth");
 // setup to send mail
 var transporter = nodemailer.createTransport({
   service: "gmail",
@@ -56,16 +56,16 @@ exports.registerStudent = async (req, res) => {
 
 exports.Login = async (req, res) => {
   try {
-    const data=await studentLogin(req.body.rollno,req.body.pswd);
+    const data = await studentLogin(req.body.rollno, req.body.pswd);
     res.status(200).json({
       data: data,
     });
-  }catch (error){
+  } catch (error) {
     res.status(401).json({
       err: "Incorrect Rollno or password",
     });
   }
-}
+};
 
 exports.forgotPassword = async (req, res) => {
   try {
@@ -184,7 +184,10 @@ exports.changePassword = async (req, res) => {
 exports.getStudentByRollno = async (req, res) => {
   try {
     const { rollno } = req.body;
+    console.log(req.body)
     const data = await student.findOne({ where: { rollno: rollno } });
+
+    data.dataValues.pswd = undefined;
     res.status(200).json({
       data: data,
     });

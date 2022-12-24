@@ -1,38 +1,5 @@
 const db = require("../../../db");
 const { DataTypes } = require("sequelize");
-
-const cheifWarden = db.define(
-    "cheifWarden",
-    {
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        primaryKey: true,
-      },
-      pswd: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      phno: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-    },
-    {
-      timestamps:true,
-    },
-    {
-      tableName: "cheifWarden",
-    }
-);
-
   
 const cheifWardenArchives = db.define(
     "cheifWardenArchives",
@@ -53,6 +20,9 @@ const cheifWardenArchives = db.define(
         allowNull: false,
         unique: true,
       },
+      department: {
+        type: DataTypes.STRING,
+       },
       fromDate:{
         type: DataTypes.DATEONLY,
       },
@@ -69,6 +39,5 @@ const cheifWardenArchives = db.define(
 );
   
 module.exports= {
-  cheifWarden,
   cheifWardenArchives
 } 

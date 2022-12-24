@@ -1,14 +1,14 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { 
-    hostelOfficeAdmin,
     hostelOfficeAdminArchives
 } = require("../models/hostelOfficeAdmin");
+const { hostelAdmin } = require("../models/hostelAdmin");
 const { hostelOfficeAdminLogin } = require("./auth")
 const bcrypt = require('bcryptjs');
 
 const getHostelOfficeAdmin = catchAsync(async (req, res) => {
-  const data = await hostelOfficeAdmin.findOne();
+  const data = await hostelAdmin.findOne({where: {role:"hostelOfficeAdmin"}});
   res.status(200).json({
       data: data,
   });
@@ -23,15 +23,16 @@ const login = catchAsync(async (req, res) => {
 });
 
 const createHostelOfficeAdmin = catchAsync(async (req, res) => {
-    const admin = await hostelOfficeAdmin.findOne({ where: { email: req.body.email } });
+    const admin = await hostelAdmin.findOne({ where: { email: req.body.email } });
     if(admin==null){
         const body = req.body;
         const pswd = await bcrypt.hash(body.pswd,8);
-        const data = await hostelOfficeAdmin.create({
+        const data = await hostelAdmin.create({
             name: body.name,
             email: body.email,
             pswd: pswd,
-            phno: body.phno
+            phno: body.phno,
+            role:"hostelOfficeAdmin"
         });
         res.status(200).json({
           data: data,
@@ -45,7 +46,7 @@ const createHostelOfficeAdmin = catchAsync(async (req, res) => {
 
 const updateHostelOfficeAdmin = catchAsync(async (req, res) => {
   const body = req.body;
-  const data = await hostelOfficeAdmin.update({
+  const data = await hostelAdmin.update({
       name: body.name,
       phno: body.phno,
   },
@@ -83,6 +84,10 @@ const createHostelOfficeAdminArchives = catchAsync(async (req, res) => {
 });
 
 module.exports={
-    hostelOfficeAdmin,
-    hostelOfficeAdminArchives
+    createHostelOfficeAdmin,
+    getHostelOfficeAdmin,
+    updateHostelOfficeAdmin,
+    createHostelOfficeAdminArchives,
+    getHostelOfficeAdminArchives,
+    login
 }

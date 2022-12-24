@@ -1,14 +1,14 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { 
-    hostelManager,
     hostelManagerArchives
 } = require("../models/hostelManager");
+const { hostelAdmin } = require("../models/hostelAdmin");
 const { hostelManagerLogin } = require("./auth")
 const bcrypt = require('bcryptjs');
 
 const getHostelManager = catchAsync(async (req, res) => {
-  const data = await hostelManager.findOne();
+  const data = await hostelAdmin.findOne({where:{role:"hostelManager"}});
   res.status(200).json({
       data: data,
   });
@@ -23,15 +23,16 @@ const login = catchAsync(async (req, res) => {
 });
 
 const createHostelManager = catchAsync(async (req, res) => {
-    const admin = await hostelManager.findOne({ where: { email: req.body.email } });
+    const admin = await hostelAdmin.findOne({ where: { email: req.body.email } });
     if(admin==null){
         const body = req.body;
         const pswd = await bcrypt.hash(body.pswd,8);
-        const data = await hostelManager.create({
+        const data = await hostelAdmin.create({
             name: body.name,
             email: body.email,
             pswd: pswd,
-            phno: body.phno
+            phno: body.phno,
+            role: "hostelManager"
         });
         res.status(200).json({
           data: data,
@@ -45,7 +46,7 @@ const createHostelManager = catchAsync(async (req, res) => {
 
 const updateHostelManager = catchAsync(async (req, res) => {
   const body = req.body;
-  const data = await hostelManager.update({
+  const data = await hostelAdmin.update({
       name: body.name,
       phno: body.phno,
   },
@@ -83,6 +84,9 @@ const createHostelManagerArchives = catchAsync(async (req, res) => {
 });
 
 module.exports={
-    hostelManager,
-    hostelManagerArchives
+    createHostelManager,
+    getHostelManager,
+    updateHostelManager,
+    createHostelManagerArchives,
+    getHostelManagerArchives
 }

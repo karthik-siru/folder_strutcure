@@ -2,10 +2,8 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { messAdmin } = require("../models/mess");
 const { hostelSecretary, hostelWarden, careTaker } = require("../models/hostel")
-const { cheifWarden } = require("../models/cheifWarden");
+const { hostelAdmin } = require("../models/hostelAdmin");
 const { has } = require("../models/has");
-const { hostelManager } = require("../models/hostelManager");
-const { hostelOfficeAdmin } = require("../models/hostelOfficeAdmin");
 const student = require("../models/student");
 const ApiError = require("../utils/apiError");
 const bcrypt = require("bcryptjs");
@@ -36,7 +34,7 @@ const messAdminLogin = async (email, pswd) => {
   if (!bcrypt.compare(pswd, data.pswd)) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect password");
   }
-  const token = await generateToken(rollno);
+  const token = await generateToken(email);
   data.dataValues["token"]=token
   return data;
 };
@@ -94,7 +92,7 @@ const hasLogin = async(email,pswd)=>{
 }
 
 const hostelManagerLogin = async(email,pswd)=>{
-  const data = await hostelManager.findOne({ where: { email: email } });
+  const data = await hostelAdmin.findOne({ where: { email: email, role:"hostelManager" } });
   if(!data){
     throw new ApiError(httpStatus.UNAUTHORIZED, 'email not exist');
   }
@@ -107,7 +105,7 @@ const hostelManagerLogin = async(email,pswd)=>{
 }
 
 const cheifWardenLogin = async(email,pswd)=>{
-  const data = await cheifWarden.findOne({ where: { email: email } });
+  const data = await hostelAdmin.findOne({ where: { email: email,role:"cheifWarden" } });
   if(!data){
     throw new ApiError(httpStatus.UNAUTHORIZED, 'email not exist');
   }
@@ -120,7 +118,7 @@ const cheifWardenLogin = async(email,pswd)=>{
 }
 
 const hostelOfficeAdminLogin = async(email,pswd)=>{
-  const data = await hostelOfficeAdmin.findOne({ where: { email: email } });
+  const data = await hostelAdmin.findOne({ where: { email: email,role:"hostelOfficeAdmin" } });
   if(!data){
     throw new ApiError(httpStatus.UNAUTHORIZED, 'email not exist');
   }

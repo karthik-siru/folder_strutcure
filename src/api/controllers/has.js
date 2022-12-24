@@ -83,6 +83,10 @@ const createHasArchives = catchAsync(async (req, res) => {
 });
 
 module.exports={
-    has,
-    hasArchives
+    createHas,
+    getHas,
+    updateHas,
+    createHasArchives,
+    getHasArchives,
+    login
 }

@@ -21,7 +21,12 @@ const {
     getMessReview,
     getMessReviewByMessId
 } = require('../controllers/mess');
-const { studentAuth,messAdminAuth } = require("../middlewares/auth")
+const student = require("../models/student")
+const { messAdmin } = require("../models/mess")
+const { hostelSecretary,hostelWarden, careTaker } = require("../models/hostel")
+const { hostelAdmin } = require("../models/hostelAdmin")
+const { has } = require("../models/has")
+const { auth } = require("../middlewares/auth")
 const router = express.Router();
 
 
@@ -38,32 +43,32 @@ const router = express.Router();
 
 //mess-admin
 router.post('/mess-admin/login',adminLogin);
-router.post('/mess-admin',createMessAdmin);
-router.post('/mess-admin/update',updateMessAdmin);
-router.get('/mess-admin',studentAuth(), getMessAdmin);
-router.get('/mess-admin/:messId',studentAuth(), getMessAdminByMessId);
+router.post('/mess-admin',auth([2,hostelAdmin]),createMessAdmin);
+router.post('/mess-admin/update',auth([2,hostelAdmin]),updateMessAdmin);
+router.get('/mess-admin',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]), getMessAdmin);
+router.get('/mess-admin/:messId',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]), getMessAdminByMessId);
 
 //mess-admin-archives
-router.post('/mess-admin-archives',createMessAdminArchives);
-router.get('/mess-admin-archives',messAdminAuth(), getMessAdminArchives);
-router.get('/mess-admin-archives/:messId',messAdminAuth(), getMessAdminArchivesByMessId);
+router.post('/mess-admin-archives',auth([2,hostelAdmin]),createMessAdminArchives);
+router.get('/mess-admin-archives',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]), getMessAdminArchives);
+router.get('/mess-admin-archives/:messId',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]), getMessAdminArchivesByMessId);
 
-router.post('/mess-user',studentAuth(),createMessUser);
-router.post('/mess-user/update',studentAuth(),updateMessUser);
-router.get('/mess-user/:studentId/:year/:month',studentAuth(),getMyMess);
-router.get('/mess-user/:year/:month', getMessUser);
-router.get('/mess-user-byid/:messId/:year/:month', getMessUserByMessId);
+router.post('/mess-user',auth([2,student]),createMessUser);
+router.post('/mess-user/update',auth([2,student]),updateMessUser);
+router.get('/mess-user/:studentId/:year/:month',auth([2,student]),getMyMess);
+router.get('/mess-user/:year/:month',auth([5,messAdmin,hostelAdmin,hostelWarden,careTaker]), getMessUser);
+router.get('/mess-user-byid/:messId/:year/:month',auth([5,messAdmin,hostelAdmin,hostelWarden,careTaker]), getMessUserByMessId);
 
 //mess-review
-router.post('/mess-review',studentAuth(),createMessReview);
-router.get('/mess-review',studentAuth(), getMessReview);
-router.get('/mess-review/:messId',studentAuth(), getMessReviewByMessId);
+router.post('/mess-review',auth([2,student]),createMessReview);
+router.get('/mess-review',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]), getMessReview);
+router.get('/mess-review/:messId',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]), getMessReviewByMessId);
 
 // mess table
-router.post('',createMess);
-router.post('/update',messAdminAuth(),updateMessDetails);
-router.get('',studentAuth(), getMessDetails);
-router.get('/:messId',studentAuth(), getMessDetailsByMessId);
+router.post('',auth([2,hostelAdmin]),createMess);
+router.post('/update',auth([2,hostelAdmin]),updateMessDetails);
+router.get('',auth([7,student,hostelAdmin,hostelWarden,careTaker,messAdmin,hostelSecretary]), getMessDetails);
+router.get('/:messId',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]) ,getMessDetailsByMessId);
 
 //mess-user
 

@@ -1,38 +1,6 @@
 const db = require("../../../db");
 const { DataTypes } = require("sequelize");
 
-const hostelManager = db.define(
-  "hostelManager",
-  {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      primaryKey: true,
-    },
-    pswd: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    phno: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-  },
-  {
-    timestamps:true,
-  },
-  {
-    tableName: "hostelManager",
-  }
-);
-
 const hostelManagerArchives = db.define(
   "hostelManagerArchives",
   {
@@ -68,6 +36,5 @@ const hostelManagerArchives = db.define(
 );
 
 module.exports = {
-  hostelManager,
   hostelManagerArchives
 }

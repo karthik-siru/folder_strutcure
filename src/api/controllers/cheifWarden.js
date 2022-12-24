@@ -1,14 +1,12 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { 
-    cheifWarden,
-    cheifWardenArchives
-} = require("../models/cheifWarden");
+const { cheifWardenArchives } = require("../models/cheifWarden");
+const { hostelAdmin } = require("../models/hostelAdmin");
 const { cheifWardenLogin } = require("./auth")
 const bcrypt = require('bcryptjs');
 
 const getCheifWarden = catchAsync(async (req, res) => {
-  const data = await cheifWarden.findOne();
+  const data = await hostelAdmin.findOne({where : {role : "cheifWarden"}});
   res.status(200).json({
       data: data,
   });
@@ -23,15 +21,16 @@ const login = catchAsync(async (req, res) => {
 });
 
 const createCheifWarden = catchAsync(async (req, res) => {
-    const admin = await cheifWarden.findOne({ where: { email: req.body.email } });
+    const admin = await hostelAdmin.findOne({ where: { email: req.body.email } });
     if(admin==null){
         const body = req.body;
         const pswd = await bcrypt.hash(body.pswd,8);
-        const data = await cheifWarden.create({
+        const data = await hostelAdmin.create({
             name: body.name,
             email: body.email,
             pswd: pswd,
-            phno: body.phno
+            phno: body.phno,
+            role: "cheifWarden",
         });
         res.status(200).json({
           data: data,
@@ -45,7 +44,7 @@ const createCheifWarden = catchAsync(async (req, res) => {
 
 const updateCheifWarden = catchAsync(async (req, res) => {
   const body = req.body;
-  const data = await cheifWarden.update({
+  const data = await hostelAdmin.update({
       name: body.name,
       phno: body.phno,
   },
@@ -83,6 +82,10 @@ const createCheifWardenArchives = catchAsync(async (req, res) => {
 });
 
 module.exports={
-    cheifWarden,
-    cheifWardenArchives
+    createCheifWarden,
+    getCheifWarden,
+    updateCheifWarden,
+    getCheifWardenArchives,
+    createCheifWardenArchives,
+    login
 }

@@ -24,6 +24,7 @@ router.param("rollno", getStudentById);
 
 // routes
 router.post("/login",Login );
+
 router.post("/register",auth([2,hostelAdmin]),registerStudent);
 router.post("/forgot-password/:rollno", forgotPassword);
 router.post("/change-password/:rollno",auth([2,student]), changePassword);

@@ -1,5 +1,5 @@
-const httpStatus = require('http-status');
-const catchAsync = require('../utils/catchAsync');
+const httpStatus = require("http-status");
+const catchAsync = require("../utils/catchAsync");
 const { messAdmin } = require("../models/mess");
 const { hostelSecretary, hostelWarden, careTaker } = require("../models/hostel")
 const { hostelAdmin } = require("../models/hostelAdmin");
@@ -22,7 +22,8 @@ const studentLogin = async (rollno, pswd) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect password");
   }
   const token = await generateToken(rollno);
-  data.dataValues["token"]=token
+  data.dataValues["token"] = token;
+  data.dataValues.pswd = undefined;
   return data;
 };
 

@@ -1,3 +1,4 @@
+
 const  httpStatus = require( 'http-status');
 const student = require('../models/student');
 const jwt = require('jsonwebtoken')
@@ -6,7 +7,7 @@ const auth = (table) => async (req, res, next) => {
   let token
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
+    req.headers.authorization.startsWith("Bearer")
   ) {
     try {
       token = req.headers.authorization.split(' ')[1]
@@ -21,19 +22,19 @@ const auth = (table) => async (req, res, next) => {
       if(data) next()
       else{
         res.status(401).json({
-          err:"Not authorized, token failed"
-        })
+          err: "Not authorized, token failed",
+        });
       }
     } catch (error) {
       res.status(401).json({
-        err:"Not authorized, token failed"
-      })
+        err: "Not authorized, token failed",
+      });
     }
   }
   if (!token) {
     res.status(401).json({
-      err:"Not authorized, no token"
-    })
+      err: "Not authorized, no token",
+    });
   }
 };
 

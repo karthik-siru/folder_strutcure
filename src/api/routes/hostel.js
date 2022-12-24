@@ -4,14 +4,14 @@ const {
   getHostelDetailsByHostelId,
   updateHostelDetails,
   createHostel,
-  getHostelAdmin,
-  createHostelAdmin,
+  getHostelSecretary,
+  createHostelSecretary,
   adminLogin,
-  getHostelAdminByHostelId,
-  updateHostelAdmin,
-  getHostelAdminArchives,
-  createHostelAdminArchives,
-  getHostelAdminArchivesByHostelId,
+  getHostelSecretaryByHostelId,
+  updateHostelSecretary,
+  getHostelSecretaryArchives,
+  createHostelSecretaryArchives,
+  getHostelSecretaryArchivesByHostelId,
   getHostelUser,
   getMyHostel,
   getHostelUserByHostelId,
@@ -34,7 +34,7 @@ const {
   createCareTakerArchives,
   getCareTakerArchivesByHostelId,
 } = require('../controllers/hostel');
-const { studentAuth,hostelAdminAuth } = require("../middlewares/auth")
+const { studentAuth,hostelSecretaryAuth } = require("../middlewares/auth")
 const router = express.Router();
 
 
@@ -57,15 +57,15 @@ router.get('/:hostelId',studentAuth(), getHostelDetailsByHostelId);
 
 //hostel-admin
 router.post('/hostel-admin/login',adminLogin);
-router.post('/hostel-admin',createHostelAdmin);
-router.post('/hostel-admin/update',updateHostelAdmin);
-router.get('/hostel-admin',studentAuth(), getHostelAdmin);
-router.get('/hostel-admin/:hostelId',studentAuth(), getHostelAdminByHostelId);
+router.post('/hostel-admin',createHostelSecretary);
+router.post('/hostel-admin/update',updateHostelSecretary);
+router.get('/hostel-admin',studentAuth(), getHostelSecretary);
+router.get('/hostel-admin/:hostelId',studentAuth(), getHostelSecretaryByHostelId);
 
 //hostel-admin-archives
-router.post('/hostel-admin-archives',createHostelAdminArchives);
-router.get('/hostel-admin-archives', getHostelAdminArchives);
-router.get('/hostel-admin-archives/:hostelId', getHostelAdminArchivesByHostelId);
+router.post('/hostel-admin-archives',createHostelSecretaryArchives);
+router.get('/hostel-admin-archives', getHostelSecretaryArchives);
+router.get('/hostel-admin-archives/:hostelId', getHostelSecretaryArchivesByHostelId);
 
 //hostel-user
 router.post('/hostel-user',studentAuth(),createHostelUser);

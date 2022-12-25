@@ -277,17 +277,18 @@ const createMessReview = catchAsync(async (req, res) => {
   });
   if (user == null) {
     const body = req.body;
+    console.log(body);
     const data = await messReview.create({
       messId: body.messId,
       studentId: body.studentId,
       year: body.year,
       month: body.month,
-      quality: body.quality,
-      quantity: body.quantity,
-      taste: body.taste,
-      catering: body.catering,
-      hygieness: body.hygieness,
-      puntuality: body.puntuality,
+      quality: parseInt(body.quality),
+      quantity: parseInt(body.quantity),
+      taste: parseInt(body.taste),
+      catering: parseInt(body.catering),
+      hyginess: parseInt(body.hygieness),
+      punctuality: parseInt(body.puntuality),
     });
     res.status(200).json({
       data: data,
@@ -295,6 +296,26 @@ const createMessReview = catchAsync(async (req, res) => {
   } else {
     res.status(401).json({
       err: "Review already done",
+    });
+  }
+});
+
+const checkMessReview = catchAsync(async (req, res) => {
+  const user = await messReview.findOne({
+    where: {
+      messId: req.body.messId,
+      studentId: req.body.studentId,
+      year: req.body.year,
+      month: req.body.month,
+    },
+  });
+  if (user == null) {
+    res.status(200).json({
+      data: { review: false },
+    });
+  } else {
+    res.status(200).json({
+      data: { review: true, rating: user },
     });
   }
 });
@@ -336,4 +357,5 @@ module.exports = {
   createMessReview,
   getMessReview,
   getMessReviewByMessId,
+  checkMessReview,
 };

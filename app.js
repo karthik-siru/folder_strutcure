@@ -3,7 +3,7 @@ require("dotenv").config();
 const httpStatus = require("http-status");
 //const { jwtStrategy } = require('./config/passport');
 const cors = require("cors");
-const ApiError = require("./src/api/utils/apiError");
+//const ApiError = require("./src/api/utils/apiError");
 
 const app = express();
 const router = express.Router();
@@ -35,12 +35,12 @@ app.get('/', (req, res) => res.send('Welcome'));
 app.use('/api', require('./src/api/routes'));
 
 // send back a 404 error for any unknown api routes
-app.use((req, res, next) => {
-  next(new ApiError(httpStatus.NOT_FOUND, 'Route Not Found'));
-});
+//app.use((req, res, next) => {
+//  next(new ApiError(httpStatus.NOT_FOUND, 'Route Not Found'));
+//});
 
 // convert error to ApiError before sending back to client
-app.use((err, req, res, next) => {
+/*app.use((err, req, res, next) => {
   if (err instanceof ApiError) {
     const apiError = err;
     return res.status(apiError.statusCode).json({
@@ -52,7 +52,7 @@ app.use((err, req, res, next) => {
     status: httpStatus.INTERNAL_SERVER_ERROR,
     err: err.message,
   });
-});
+});*/
 
 // handle error
 app.use((err, req, res, next) => {

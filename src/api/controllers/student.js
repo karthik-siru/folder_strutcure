@@ -183,7 +183,7 @@ exports.changePassword = async (req, res) => {
 exports.getStudentByRollno = async (req, res) => {
   try {
     const { rollno } = req.body;
-    console.log(req.body)
+    console.log(rollno)
     const data = await student.findOne({ where: { rollno: rollno } });
 
     data.dataValues.pswd = undefined;

@@ -47,9 +47,7 @@ const student = db.define(
 );
 
 (async () => {
-  await db.sync({
-    alter: true,
-  });
+  await db.sync({});
 })();
 
 module.exports = student;

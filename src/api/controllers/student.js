@@ -12,6 +12,9 @@ var transporter = nodemailer.createTransport({
     user: process.env.MAIL,
     pass: process.env.MAIL_APP_PASSWORD,
   },
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
 
 //register a student  :
@@ -19,11 +22,11 @@ var transporter = nodemailer.createTransport({
 exports.registerStudent = async (req, res) => {
   try {
     const { name, rollno, email, pswd, dob, address, phno, gender } = req.body;
-    console.log(req.body)
-    const oldStudent = await student.findOne({ where: { rollno: rollno } });;
+    console.log(req.body);
+    const oldStudent = await student.findOne({ where: { rollno: rollno } });
     var dateMomentObject = moment(dob, "DD/MM/YYYY");
     var dobDateObject = dateMomentObject.toDate();
-    console.log(oldStudent)
+    console.log(oldStudent);
     var encryptedpswd = await bcrypt.hash(pswd, 8);
     if (oldStudent === null) {
       const newStudent = await student.create({
@@ -34,9 +37,9 @@ exports.registerStudent = async (req, res) => {
         dob: dobDateObject,
         address: address,
         phno: phno,
-        gender:gender,
+        gender: gender,
       });
-      console.log(newStudent)
+      console.log(newStudent);
       newStudent.pswd = null;
       res.status(200).json({
         message: "Registration Successfull",
@@ -130,6 +133,7 @@ exports.changePassword = async (req, res) => {
     const Student = req.student;
     const { rollno, pswd, name, email } = Student;
 
+    console.log(pswd, currPassword, name);
     if (await bcrypt.compare(currPassword, pswd)) {
       const newEncryptedPassword = await bcrypt.hash(newPassword, 8);
 
@@ -184,7 +188,7 @@ exports.changePassword = async (req, res) => {
 exports.getStudentByRollno = async (req, res) => {
   try {
     const { rollno } = req.body;
-    console.log(rollno)
+    console.log(rollno);
     const data = await student.findOne({ where: { rollno: rollno } });
 
     data.dataValues.pswd = undefined;

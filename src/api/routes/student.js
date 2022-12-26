@@ -30,7 +30,7 @@ router.param("rollno", getStudentById);
 router.post("/login", Login);
 
 router.post("/register",auth([2,messAdmin]), registerStudent);
-router.post("/forgot-password/:rollno", forgotPassword);
+router.get("/forgot-password/:rollno", forgotPassword);
 router.post("/change-password/:rollno", auth([2, student]), changePassword);
 router.post(
   "/get-student-by-rollno",

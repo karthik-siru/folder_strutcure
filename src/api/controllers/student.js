@@ -18,14 +18,12 @@ var transporter = nodemailer.createTransport({
 
 exports.registerStudent = async (req, res) => {
   try {
-    const { name, rollno, email, pswd, dob, address, phno } = req.body;
-    const oldStudent = await student.findOne({ where: { rollno: rollno } });
-
+    const { name, rollno, email, pswd, dob, address, phno, gender } = req.body;
+    const oldStudent = await student.findOne({ where: { rollno: rollno } });;
     var dateMomentObject = moment(dob, "DD/MM/YYYY");
     var dobDateObject = dateMomentObject.toDate();
 
     var encryptedpswd = await bcrypt.hash(pswd, 8);
-
     if (oldStudent === null) {
       const newStudent = await student.create({
         name: `${name}`,
@@ -35,7 +33,9 @@ exports.registerStudent = async (req, res) => {
         dob: dobDateObject,
         address: address,
         phno: phno,
+        gender:gender,
       });
+      console.log(newStudent)
       newStudent.pswd = null;
       res.status(200).json({
         message: "Registration Successfull",

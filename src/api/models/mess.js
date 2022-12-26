@@ -207,10 +207,10 @@ const messAvailability = db.define(
     girlsCount: {
       type: DataTypes.INTEGER,
     },
-    boyCapacity: {
+    boysCapacity: {
       type: DataTypes.INTEGER,
     },
-    girlCapacity: {
+    girlsCapacity: {
       type: DataTypes.INTEGER,
     },
   },

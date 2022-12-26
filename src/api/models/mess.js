@@ -228,7 +228,7 @@ mess.hasOne(messAvailability, {
 });
 
 (async () => {
-  await db.sync();
+  await db.sync({alter:true});
 })();
 
 module.exports ={

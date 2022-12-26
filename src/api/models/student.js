@@ -36,6 +36,10 @@ const student = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    gender: {
+      type: DataTypes.CHAR,
+      allowNull: false,
+    },
   },
   {
     tableName: "student",
@@ -43,7 +47,9 @@ const student = db.define(
 );
 
 (async () => {
-  await db.sync();
+  await db.sync({
+    alter: true,
+  });
 })();
 
 module.exports = student;

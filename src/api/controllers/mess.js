@@ -404,4 +404,6 @@ module.exports = {
   createMessReview,
   getMessReview,
   getMessReviewByMessId,
+  getMessAvailability,
+  getMessAvailabilityByMessId
 };

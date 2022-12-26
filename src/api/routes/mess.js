@@ -19,7 +19,9 @@ const {
     updateMessUser,
     createMessReview,
     getMessReview,
-    getMessReviewByMessId
+    getMessReviewByMessId,
+    getMessAvailability,
+    getMessAvailabilityByMessId
 } = require('../controllers/mess');
 const student = require("../models/student")
 const { messAdmin } = require("../models/mess")
@@ -70,7 +72,10 @@ router.post('/update',auth([2,hostelAdmin]),updateMessDetails);
 router.get('',auth([7,student,hostelAdmin,hostelWarden,careTaker,messAdmin,hostelSecretary]), getMessDetails);
 router.get('/:messId',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]) ,getMessDetailsByMessId);
 
-//mess-user
+//mess-availabilty
+router.get('/mess-availablity',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]),getMessAvailability);
+router.get('/mess-availablity/:messId',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]), getMessAvailabilityByMessId);
+
 
 module.exports = router;
 

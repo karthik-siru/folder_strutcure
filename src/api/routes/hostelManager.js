@@ -24,3 +24,4 @@ router.get('',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hoste
 //archives
 router.post('/archives',auth([2,hostelAdmin]),createHostelManagerArchives);
 router.get('/archives',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]), getHostelManagerArchives);
+module.exports = router;

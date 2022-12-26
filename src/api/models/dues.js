@@ -53,7 +53,7 @@ hostel.hasMany(dues, {
 });
 
 (async () => {
-  await db.sync({alter:true});
+  await db.sync();
 })();
 
 module.exports = dues;

@@ -303,7 +303,7 @@ hostel.hasMany(careTakerArchives, {
 });
 
 (async () => {
-  await db.sync({alter:true});
+  await db.sync();
 })();
 
 module.exports ={

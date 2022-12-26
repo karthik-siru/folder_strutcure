@@ -6,7 +6,7 @@ const {
     getHasArchives,
     createHasArchives,
     login
-} = require('../controllers');
+} = require('../controllers/has');
 const { auth } = require("../middlewares/auth")
 const student = require("../models/student")
 const { messAdmin } = require("../models/mess")
@@ -24,3 +24,4 @@ router.get('',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hoste
 //archives
 router.post('/archives',auth([2,hostelAdmin]),createHasArchives);
 router.get('/archives',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]), getHasArchives);
+module.exports = router;

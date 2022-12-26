@@ -88,5 +88,6 @@ module.exports={
     getHostelManager,
     updateHostelManager,
     createHostelManagerArchives,
-    getHostelManagerArchives
+    getHostelManagerArchives,
+    login
 }

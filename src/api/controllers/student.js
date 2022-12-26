@@ -19,7 +19,7 @@ var transporter = nodemailer.createTransport({
 exports.registerStudent = async (req, res) => {
   try {
     const { name, rollno, email, pswd, dob, address, phno, gender } = req.body;
-    const oldStudent = null;
+    const oldStudent = await student.findOne({ where: { rollno: rollno } });;
     var dateMomentObject = moment(dob, "DD/MM/YYYY");
     var dobDateObject = dateMomentObject.toDate();
 

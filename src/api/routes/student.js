@@ -3,7 +3,10 @@ const router = express.Router();
 
 // middleware
 const { getStudentById } = require("../middlewares/student");
+<<<<<<< HEAD
 const { studentAuth } = require("../middlewares/auth");
+=======
+>>>>>>> 8c38bb8e8dce777a23ede8377e0dfe90d574f0d4
 //controllers
 const {
   registerStudent,
@@ -30,7 +33,7 @@ router.param("rollno", getStudentById);
 // routes
 router.post("/login", Login);
 
-router.post("/register", auth([2, hostelAdmin]), registerStudent);
+router.post("/register", registerStudent);
 router.post("/forgot-password/:rollno", forgotPassword);
 router.post("/change-password/:rollno", auth([2, student]), changePassword);
 router.post(
@@ -56,5 +59,9 @@ router.get(
   auth([6, messAdmin, hostelAdmin, hostelWarden, careTaker, hostelSecretary]),
   getAllStudents
 );
+<<<<<<< HEAD
+=======
+router.get("/get-student-by-rollno", auth([6, messAdmin, hostelAdmin, hostelWarden, careTaker, hostelSecretary]), getStudentByRollno);
+>>>>>>> 8c38bb8e8dce777a23ede8377e0dfe90d574f0d4
 
 module.exports = router;

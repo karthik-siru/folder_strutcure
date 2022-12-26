@@ -19,6 +19,7 @@ const auth = (table) => async (req, res, next) => {
         else data = data || await table[i].findOne({ where: { email: decoded.id } })
         if(data) break;
       }
+      req.body["data"]=data;
       if(data) next()
       else{
         res.status(401).json({

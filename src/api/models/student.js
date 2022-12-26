@@ -36,6 +36,10 @@ const student = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    gender:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    }
   },
   {
     tableName: "student",

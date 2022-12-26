@@ -2,8 +2,8 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { 
     hostel, 
-    hostelAdmin, 
-    hostelAdminArchives, 
+    hostelSecretary, 
+    hostelSecretaryArchives, 
     hostelUser,
     hostelWarden,
     hostelWardenArchives,
@@ -11,7 +11,7 @@ const {
     careTakerArchives
 } = require("../models/hostel");
 const { 
-    hostelAdminLogin,
+    hostelSecretaryLogin,
     hostelWardenLogin,
     careTakerLogin
 } = require("./auth")
@@ -66,28 +66,28 @@ const updateHostelDetails = catchAsync(async (req, res) => {
 });
 
 
-const getHostelAdmin = catchAsync(async (req, res) => {
-    const data = await  hostelAdmin.findAll();
+const getHostelSecretary = catchAsync(async (req, res) => {
+    const data = await  hostelSecretary.findAll();
     res.send(data);
 });
 
 
 const adminLogin = catchAsync(async (req, res) => {
-    const data=await hostelAdminLogin(req.body.email,req.body.pswd);
+    const data=await hostelSecretaryLogin(req.body.email,req.body.pswd);
     res.send(data);
 });
 
-const getHostelAdminByHostelId = catchAsync(async (req, res) => {
-    const data = await  hostelAdmin.findAll({ where: { hostelId: req.params.hostelId } });
+const getHostelSecretaryByHostelId = catchAsync(async (req, res) => {
+    const data = await  hostelSecretary.findAll({ where: { hostelId: req.params.hostelId } });
     res.send(data);
 });
 
-const createHostelAdmin = catchAsync(async (req, res) => {
-    const admin = await hostelAdmin.findOne({ where: { email: req.body.email } });
+const createHostelSecretary = catchAsync(async (req, res) => {
+    const admin = await hostelSecretary.findOne({ where: { email: req.body.email } });
     if(admin==null){
         const body = req.body;
         const pswd = await bcrypt.hash(body.pswd,8);
-        const data = await hostelAdmin.create({
+        const data = await hostelSecretary.create({
             name: body.name,
             email: body.email,
             pswd: pswd,
@@ -102,15 +102,15 @@ const createHostelAdmin = catchAsync(async (req, res) => {
     }
 });
 
-const updateHostelAdmin = catchAsync(async (req, res) => {
-    const admin = await hostelAdmin.findOne({ where: { email: req.body.email } });
+const updateHostelSecretary = catchAsync(async (req, res) => {
+    const admin = await hostelSecretary.findOne({ where: { email: req.body.email } });
     if(!admin){
         res.status(401).json({
             err: "admin with that email not exits",
         });
     }else{
         const body = req.body;
-        const data = await hostelAdmin.update({
+        const data = await hostelSecretary.update({
             name: body.name,
             phno: body.phno,
         });
@@ -118,21 +118,21 @@ const updateHostelAdmin = catchAsync(async (req, res) => {
     }
 });
 
-const getHostelAdminArchives = catchAsync(async (req, res) => {
-    const data = await  hostelAdminArchives.findAll();
+const getHostelSecretaryArchives = catchAsync(async (req, res) => {
+    const data = await  hostelSecretaryArchives.findAll();
     res.send(data);
 });
 
-const getHostelAdminArchivesByHostelId = catchAsync(async (req, res) => {
-    const data = await  hostelAdminArchives.findAll({ where: { hostelId: req.params.hostelId } });
+const getHostelSecretaryArchivesByHostelId = catchAsync(async (req, res) => {
+    const data = await  hostelSecretaryArchives.findAll({ where: { hostelId: req.params.hostelId } });
     res.send(data);
 });
 
-const createHostelAdminArchives = catchAsync(async (req, res) => {
-    const admin = await hostelAdminArchives.findOne({ where: { email: req.body.email } });
+const createHostelSecretaryArchives = catchAsync(async (req, res) => {
+    const admin = await hostelSecretaryArchives.findOne({ where: { email: req.body.email } });
     if(admin==null){
         const body = req.body;
-        const data = await hostelAdminArchives.create({
+        const data = await hostelSecretaryArchives.create({
             name: body.name,
             email: body.email,
             phno: body.phno,
@@ -181,14 +181,14 @@ const createHostelUser = catchAsync(async (req, res) => {
 });
 
 const updateHostelUser = catchAsync(async (req, res) => {
-    const admin = await hostelAdmin.findOne({ where: { hostelId: req.body.hostelId, studentId: req.body.studentId, year:year } });
+    const admin = await hostelSecretary.findOne({ where: { hostelId: req.body.hostelId, studentId: req.body.studentId, year:year } });
     if(!admin){
         res.status(401).json({
             err: "Hostel not allocated",
         });
     }else{
         const body = req.body;
-        const data = await hostelAdmin.update({
+        const data = await hostelSecretary.update({
             hostelId: body.hostelId,
         });
         res.send(data);
@@ -371,14 +371,14 @@ module.exports = {
   getHostelDetailsByHostelId,
   updateHostelDetails,
   createHostel,
-  getHostelAdmin,
-  createHostelAdmin,
+  getHostelSecretary,
+  createHostelSecretary,
   adminLogin,
-  getHostelAdminByHostelId,
-  updateHostelAdmin,
-  getHostelAdminArchives,
-  createHostelAdminArchives,
-  getHostelAdminArchivesByHostelId,
+  getHostelSecretaryByHostelId,
+  updateHostelSecretary,
+  getHostelSecretaryArchives,
+  createHostelSecretaryArchives,
+  getHostelSecretaryArchivesByHostelId,
   getHostelUser,
   getMyHostel,
   getHostelUserByHostelId,

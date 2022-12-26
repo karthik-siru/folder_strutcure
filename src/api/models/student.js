@@ -37,7 +37,7 @@ const student = db.define(
       allowNull: false,
     },
     gender: {
-      type: DataTypes.CHAR,
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },

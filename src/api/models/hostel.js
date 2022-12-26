@@ -39,8 +39,8 @@ const hostel = db.define(
   }
 );
 
-const hostelAdmin = db.define(
-  "hostelAdmin",
+const hostelSecretary = db.define(
+  "hostelSecretary",
   {
     name: {
       type: DataTypes.STRING,
@@ -67,11 +67,11 @@ const hostelAdmin = db.define(
     timestamps:true,
   },
   {
-    tableName: "hostelAdmin",
+    tableName: "hostelSecretary",
   }
 );
 
-hostel.hasOne(hostelAdmin, {
+hostel.hasOne(hostelSecretary, {
   foreignKey: "hostelId",
   sourceKey: "hostelId",
 });
@@ -104,8 +104,8 @@ student.hasMany(hostelUser,{
   sourceKey: "rollno",
 });
 
-const hostelAdminArchives = db.define(
-  "hostelAdminArchives",
+const hostelSecretaryArchives = db.define(
+  "hostelSecretaryArchives",
   {
     name: {
       type: DataTypes.STRING,
@@ -134,11 +134,11 @@ const hostelAdminArchives = db.define(
     timestamps:false,
   },
   {
-    tableName: "hostelAdminArchives",
+    tableName: "hostelSecretaryArchives",
   }
 );
 
-hostel.hasMany(hostelAdminArchives, {
+hostel.hasMany(hostelSecretaryArchives, {
   foreignKey: "hostelId",
   sourceKey: "hostelId",
 });
@@ -308,9 +308,9 @@ hostel.hasMany(careTakerArchives, {
 
 module.exports ={
  hostel,
- hostelAdmin,
+ hostelSecretary,
  hostelUser,
- hostelAdminArchives,
+ hostelSecretaryArchives,
  hostelWarden,
  hostelWardenArchives,
  careTaker,

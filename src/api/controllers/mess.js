@@ -304,11 +304,17 @@ const updateMessUser = catchAsync(async (req, res) => {
       if(gender=="male"){
         messAvailablityData = await messAvailability.update({
           boysCount: availability.boysCount+1,
+        },{where: { messId: body.messId }});
+        messAvailablityData = await messAvailability.update({
+          boysCount: availability.boysCount-1,
         },{where: { messId: admin.messId }});
       }
       if(gender=="female"){
         messAvailablityData = await messAvailability.update({
           girlsCount: availability.girlsCount+1,
+        },{where: { messId: body.messId }});
+        messAvailablityData = await messAvailability.update({
+          girlsCount: availability.girlsCount-1,
         },{where: { messId: admin.messId }});
       }
       res.status(200).json({ message: "successfully updated" });

@@ -1,35 +1,39 @@
 const express = require("express");
 const {
-    createMess,
-    updateMessDetails,
-    getMessDetails, 
-    getMessDetailsByMessId,
-    createMessAdmin,
-    updateMessAdmin,
-    getMessAdmin,
-    adminLogin,
-    getMessAdminByMessId,
-    createMessAdminArchives,
-    getMessAdminArchives,
-    getMessAdminArchivesByMessId,
-    getMessUser,
-    getMyMess,
-    getMessUserByMessId,
-    createMessUser,
-    updateMessUser,
-    createMessReview,
-    getMessReview,
-    checkMessReview,
-    getMessReviewByMessId,
-    getMessAvailability,
-    getMessAvailabilityByMessId
-} = require('../controllers/mess');
-const student = require("../models/student")
-const { messAdmin } = require("../models/mess")
-const { hostelSecretary,hostelWarden, careTaker } = require("../models/hostel")
-const { hostelAdmin } = require("../models/hostelAdmin")
-const { has } = require("../models/has")
-const { auth } = require("../middlewares/auth")
+  createMess,
+  updateMessDetails,
+  getMessDetails,
+  getMessDetailsByMessId,
+  createMessAdmin,
+  updateMessAdmin,
+  getMessAdmin,
+  adminLogin,
+  getMessAdminByMessId,
+  createMessAdminArchives,
+  getMessAdminArchives,
+  getMessAdminArchivesByMessId,
+  getMessUser,
+  getMyMess,
+  getMessUserByMessId,
+  createMessUser,
+  updateMessUser,
+  createMessReview,
+  getMessReview,
+  checkMessReview,
+  getMessReviewByMessId,
+  getMessAvailability,
+  getMessAvailabilityByMessId,
+} = require("../controllers/mess");
+const student = require("../models/student");
+const { messAdmin } = require("../models/mess");
+const {
+  hostelSecretary,
+  hostelWarden,
+  careTaker,
+} = require("../models/hostel");
+const { hostelAdmin } = require("../models/hostelAdmin");
+const { has } = require("../models/has");
+const { auth } = require("../middlewares/auth");
 const router = express.Router();
 
 /**
@@ -181,8 +185,31 @@ router.get(
 );
 
 //mess-availabilty
-router.get('/mess-availablity',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]),getMessAvailability);
-router.get('/mess-availablity/:messId',auth([7,student,messAdmin,hostelAdmin,hostelWarden,careTaker,hostelSecretary]), getMessAvailabilityByMessId);
-
+router.get(
+  "/mess-availablity/:id",
+  auth([
+    7,
+    student,
+    messAdmin,
+    hostelAdmin,
+    hostelWarden,
+    careTaker,
+    hostelSecretary,
+  ]),
+  getMessAvailability
+);
+router.get(
+  "/mess-availablitybyid/:messId",
+  auth([
+    7,
+    student,
+    messAdmin,
+    hostelAdmin,
+    hostelWarden,
+    careTaker,
+    hostelSecretary,
+  ]),
+  getMessAvailabilityByMessId
+);
 
 module.exports = router;

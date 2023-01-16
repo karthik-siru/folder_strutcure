@@ -1,6 +1,6 @@
 const db = require("../../../db");
 const { DataTypes } = require("sequelize");
-const student = require('./student')
+const student = require("./student");
 
 const mess = db.define(
   "mess",
@@ -14,7 +14,7 @@ const mess = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       unique: true,
-      primaryKey:true,
+      primaryKey: true,
     },
     description: {
       type: DataTypes.TEXT,
@@ -41,7 +41,7 @@ const mess = db.define(
     },
   },
   {
-    timestamps:true,
+    timestamps: true,
   },
   {
     tableName: "mess",
@@ -73,7 +73,7 @@ const messAdmin = db.define(
     },
   },
   {
-    timestamps:true,
+    timestamps: true,
   },
   {
     tableName: "messAdmin",
@@ -96,20 +96,19 @@ const messUser = db.define(
     },
   },
   {
-    timestamps:false,
+    timestamps: false,
   },
   {
     tableName: "messUser",
   }
 );
 
-
 mess.hasMany(messUser, {
   foreignKey: "messId",
   sourceKey: "messId",
 });
 
-student.hasMany(messUser,{
+student.hasMany(messUser, {
   foreignKey: "studentId",
   sourceKey: "rollno",
 });
@@ -132,15 +131,15 @@ const messAdminArchives = db.define(
       allowNull: false,
       unique: true,
     },
-    fromDate:{
+    fromDate: {
       type: DataTypes.DATEONLY,
     },
-    toDate:{
+    toDate: {
       type: DataTypes.DATEONLY,
-    }
+    },
   },
   {
-    timestamps:false,
+    timestamps: false,
   },
   {
     tableName: "messAdminArchives",
@@ -178,10 +177,10 @@ const messReview = db.define(
     },
     year: {
       type: DataTypes.INTEGER,
-    }
+    },
   },
   {
-    timestamps:true,
+    timestamps: true,
   },
   {
     tableName: "messReview",
@@ -193,7 +192,7 @@ mess.hasMany(messReview, {
   sourceKey: "messId",
 });
 
-student.hasMany(messReview,{
+student.hasMany(messReview, {
   foreignKey: "studentId",
   sourceKey: "rollno",
 });
@@ -215,7 +214,7 @@ const messAvailability = db.define(
     },
   },
   {
-    timestamps:false,
+    timestamps: false,
   },
   {
     tableName: "messAvailability",
@@ -231,11 +230,11 @@ mess.hasOne(messAvailability, {
   await db.sync();
 })();
 
-module.exports ={
- mess,
- messAdmin,
- messUser,
- messAdminArchives,
- messReview,
- messAvailability
-}
+module.exports = {
+  mess,
+  messAdmin,
+  messUser,
+  messAdminArchives,
+  messReview,
+  messAvailability,
+};

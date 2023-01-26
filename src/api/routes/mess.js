@@ -24,6 +24,7 @@ const {
   getMessAvailability,
   getMessAvailabilityByMessId,
   getMessUserByStudentId,
+  getMessAdminByEmail
 } = require("../controllers/mess");
 const student = require("../models/student");
 const { messAdmin } = require("../models/mess");
@@ -64,6 +65,7 @@ router.get(
   ]),
   getMessAdmin
 );
+router.post("/mess-admin-by-email",auth([2,messAdmin]),getMessAdminByEmail)
 router.get(
   "/mess-admin/:messId",
   auth([

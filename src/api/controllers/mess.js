@@ -104,6 +104,16 @@ const getMessAdminByMessId = catchAsync(async (req, res) => {
   });
 });
 
+const getMessAdminByEmail = catchAsync(async (req, res) => {
+  const data = await messAdmin.findOne({
+    where: { email: req.body.email },
+  });
+  data.pswd = undefined
+  res.status(200).json({
+    data: data,
+  });
+});
+
 const createMessAdmin = catchAsync(async (req, res) => {
   const admin = await messAdmin.findOne({ where: { email: req.body.email } });
   if (admin == null) {
@@ -499,4 +509,5 @@ module.exports = {
   getMessAvailability,
   getMessAvailabilityByMessId,
   getMessUserByStudentId,
+  getMessAdminByEmail
 };

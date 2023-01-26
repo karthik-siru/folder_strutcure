@@ -89,7 +89,7 @@ const getMessAdmin = catchAsync(async (req, res) => {
 });
 
 const adminLogin = catchAsync(async (req, res) => {
-  const data = await messAdminLogin(req.body.email, req.body.pswd);
+  const data = await messAdminLogin(req.body.rollno, req.body.pswd);
   res.status(200).json({
     data: data,
   });
@@ -205,6 +205,17 @@ const getMyMess = catchAsync(async (req, res) => {
       err: "Unable to find student mess details",
     });
   }
+});
+
+const getMessUserByStudentId = catchAsync(async (req, res) => {
+  const data = await messUser.findAll({
+    where: {
+      studentId: req.params.studentId,
+    },
+  });
+  res.status(200).json({
+    data: data,
+  });
 });
 
 const getMessUserByMessId = catchAsync(async (req, res) => {
@@ -323,19 +334,28 @@ const updateMessUser = catchAsync(async (req, res) => {
       { where: { studentId: req.body.studentId, year: year, month: month } }
     );
     if (data[0]) {
-      let messAvailablityData; 
-      if(gender=="male"){
-        messAvailablityData = await messAvailability.update({
-          boysCount: availability.boysCount+1,
-        },{where: { messId: body.messId }});
-        messAvailablityData = await messAvailability.update({
-          boysCount: availability.boysCount-1,
-        },{where: { messId: admin.messId }});
+      let messAvailablityData;
+      if (gender == "male") {
+        messAvailablityData = await messAvailability.update(
+          {
+            boysCount: availability.boysCount + 1,
+          },
+          { where: { messId: body.messId } }
+        );
+        messAvailablityData = await messAvailability.update(
+          {
+            boysCount: availability.boysCount - 1,
+          },
+          { where: { messId: admin.messId } }
+        );
       }
-      if(gender=="female"){
-        messAvailablityData = await messAvailability.update({
-          girlsCount: availability.girlsCount+1,
-        },{where: { messId: admin.messId }});
+      if (gender == "female") {
+        messAvailablityData = await messAvailability.update(
+          {
+            girlsCount: availability.girlsCount + 1,
+          },
+          { where: { messId: admin.messId } }
+        );
       }
       res.status(200).json({ message: "successfully updated" });
     } else res.status(401).json({ err: "not updated" });
@@ -405,10 +425,37 @@ const getMessReview = catchAsync(async (req, res) => {
 
 const getMessReviewByMessId = catchAsync(async (req, res) => {
   const data = await messReview.findAll({
-    where: { messId: req.params.messId },
+    where: {
+      messId: req.params.messId,
+      year: req.params.year,
+      month: req.params.month,
+    },
   });
+  let ret = {
+    quality: 0,
+    quantity: 0,
+    taste: 0,
+    catering: 0,
+    hyginess: 0,
+    punctuality: 0,
+  };
+  for (let i = 0; i < data.length; i++) {
+    ret.quality = ret.quality + data[i].quality;
+    ret.quantity = ret.quantity + data[i].quantity;
+    ret.taste = ret.taste + data[i].taste;
+    ret.catering = ret.catering + data[i].catering;
+    ret.hyginess = ret.hyginess + data[i].hyginess;
+    ret.punctuality = ret.punctuality + data[i].punctuality;
+  }
+  ret.quality = ret.quality / data.length;
+  ret.quantity = ret.quantity / data.length;
+  ret.taste = ret.taste / data.length;
+  ret.catering = ret.catering / data.length;
+  ret.hyginess = ret.hyginess / data.length;
+  ret.punctuality = ret.punctuality / data.length;
+
   res.status(200).json({
-    data: data,
+    data: ret,
   });
 });
 
@@ -451,4 +498,5 @@ module.exports = {
   checkMessReview,
   getMessAvailability,
   getMessAvailabilityByMessId,
+  getMessUserByStudentId,
 };

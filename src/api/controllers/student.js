@@ -202,6 +202,7 @@ exports.getStudentByRollno = async (req, res) => {
   }
 };
 
+
 exports.getStudentByPartialName = async (req, res) => {
   try {
     const { name } = req.body;

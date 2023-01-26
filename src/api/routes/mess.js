@@ -23,6 +23,7 @@ const {
   getMessReviewByMessId,
   getMessAvailability,
   getMessAvailabilityByMessId,
+  getMessUserByStudentId,
 } = require("../controllers/mess");
 const student = require("../models/student");
 const { messAdmin } = require("../models/mess");
@@ -124,6 +125,13 @@ router.get(
   getMessUserByMessId
 );
 
+router.get(
+  "/mess-user-studentid/:studentId",
+  auth([6,student, messAdmin, hostelAdmin, hostelWarden, careTaker]),
+  getMessUserByStudentId
+);
+
+
 //mess-review
 router.post("/mess-review", auth([2, student]), createMessReview);
 router.post("/check-mess-review", auth([2, student]), checkMessReview);
@@ -141,7 +149,7 @@ router.get(
   getMessReview
 );
 router.get(
-  "/mess-review/:messId",
+  "/mess-review/:messId/:year/:month",
   auth([
     7,
     student,

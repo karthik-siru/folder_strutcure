@@ -89,7 +89,7 @@ const getMessAdmin = catchAsync(async (req, res) => {
 });
 
 const adminLogin = catchAsync(async (req, res) => {
-  const data = await messAdminLogin(req.body.email, req.body.pswd);
+  const data = await messAdminLogin(req.body.rollno, req.body.pswd);
   res.status(200).json({
     data: data,
   });
@@ -99,6 +99,16 @@ const getMessAdminByMessId = catchAsync(async (req, res) => {
   const data = await messAdmin.findOne({
     where: { messId: req.params.messId },
   });
+  res.status(200).json({
+    data: data,
+  });
+});
+
+const getMessAdminByEmail = catchAsync(async (req, res) => {
+  const data = await messAdmin.findOne({
+    where: { email: req.body.email },
+  });
+  data.pswd = undefined
   res.status(200).json({
     data: data,
   });
@@ -207,6 +217,17 @@ const getMyMess = catchAsync(async (req, res) => {
   }
 });
 
+const getMessUserByStudentId = catchAsync(async (req, res) => {
+  const data = await messUser.findAll({
+    where: {
+      studentId: req.params.studentId,
+    },
+  });
+  res.status(200).json({
+    data: data,
+  });
+});
+
 const getMessUserByMessId = catchAsync(async (req, res) => {
   const data = await messUser.findAll({
     where: {
@@ -226,16 +247,22 @@ const createMessUser = catchAsync(async (req, res) => {
   });
   if (user == null) {
     const body = req.body;
-    const gender=req.body.data.gender;
+    const gender = req.body.data.gender;
     const availability = await messAvailability.findAll({
       where: { messId: req.body.messId },
     });
-    if(gender=="male" && availability.boysCount>=availability.boysCapacity){
+    if (
+      gender == "male" &&
+      availability.boysCount >= availability.boysCapacity
+    ) {
       res.status(401).json({
         err: "Mess capacity exceeded can't allocate",
       });
     }
-    if(gender=="female" && availability.girlsCount>=availability.girlsCapacity){
+    if (
+      gender == "female" &&
+      availability.girlsCount >= availability.girlsCapacity
+    ) {
       res.status(401).json({
         err: "Mess capacity exceeded can't allocate",
       });
@@ -246,16 +273,22 @@ const createMessUser = catchAsync(async (req, res) => {
       year: year,
       month: month,
     });
-    let messAvailablityData; 
-    if(gender=="male"){
-      messAvailablityData = await messAvailability.update({
-        boysCount: availability.boysCount+1,
-      },{where: { messId: body.messId }});
+    let messAvailablityData;
+    if (gender == "male") {
+      messAvailablityData = await messAvailability.update(
+        {
+          boysCount: availability.boysCount + 1,
+        },
+        { where: { messId: body.messId } }
+      );
     }
-    if(gender=="female"){
-      messAvailablityData = await messAvailability.update({
-        girlsCount: availability.girlsCount+1,
-      },{where: { messId: body.messId }});
+    if (gender == "female") {
+      messAvailablityData = await messAvailability.update(
+        {
+          girlsCount: availability.girlsCount + 1,
+        },
+        { where: { messId: body.messId } }
+      );
     }
     res.status(200).json({
       data: data,
@@ -269,7 +302,8 @@ const createMessUser = catchAsync(async (req, res) => {
 });
 
 const updateMessUser = catchAsync(async (req, res) => {
-  if (day<25) {
+  const gender = req.body.data.gender;
+  if (day < 25) {
     res.status(401).json({
       err: "update not possible",
     });
@@ -285,41 +319,56 @@ const updateMessUser = catchAsync(async (req, res) => {
     const availability = await messAvailability.findOne({
       where: { messId: req.body.messId },
     });
-    if(gender=="male" && availability.boysCount>=availability.boysCapacity){
+    if (
+      gender == "male" &&
+      availability.boysCount >= availability.boysCapacity
+    ) {
       res.status(401).json({
         err: "Mess capacity exceeded can't update",
       });
     }
-    if(gender=="female" && availability.girlsCount>=availability.girlsCapacity){
+    if (
+      gender == "female" &&
+      availability.girlsCount >= availability.girlsCapacity
+    ) {
       res.status(401).json({
         err: "Mess capacity exceeded can't update",
       });
     }
     const body = req.body;
-    const data = await messAdmin.update({
-      messId: body.messId,
-    },{where: { studentId: req.body.studentId, year: year, month: month }});
+
+    const data = await messUser.update(
+      {
+        messId: body.messId,
+      },
+      { where: { studentId: req.body.studentId, year: year, month: month } }
+    );
     if (data[0]) {
-      let messAvailablityData; 
-      if(gender=="male"){
-        messAvailablityData = await messAvailability.update({
-          boysCount: availability.boysCount+1,
-        },{where: { messId: body.messId }});
-        messAvailablityData = await messAvailability.update({
-          boysCount: availability.boysCount-1,
-        },{where: { messId: admin.messId }});
+      let messAvailablityData;
+      if (gender == "male") {
+        messAvailablityData = await messAvailability.update(
+          {
+            boysCount: availability.boysCount + 1,
+          },
+          { where: { messId: body.messId } }
+        );
+        messAvailablityData = await messAvailability.update(
+          {
+            boysCount: availability.boysCount - 1,
+          },
+          { where: { messId: admin.messId } }
+        );
       }
-      if(gender=="female"){
-        messAvailablityData = await messAvailability.update({
-          girlsCount: availability.girlsCount+1,
-        },{where: { messId: body.messId }});
-        messAvailablityData = await messAvailability.update({
-          girlsCount: availability.girlsCount-1,
-        },{where: { messId: admin.messId }});
+      if (gender == "female") {
+        messAvailablityData = await messAvailability.update(
+          {
+            girlsCount: availability.girlsCount + 1,
+          },
+          { where: { messId: admin.messId } }
+        );
       }
       res.status(200).json({ message: "successfully updated" });
-    }
-    else res.status(401).json({ err: "not updated" });
+    } else res.status(401).json({ err: "not updated" });
   }
 });
 
@@ -360,12 +409,12 @@ const createMessReview = catchAsync(async (req, res) => {
 const checkMessReview = catchAsync(async (req, res) => {
   const user = await messReview.findOne({
     where: {
-      messId: req.body.messId,
       studentId: req.body.studentId,
       year: req.body.year,
       month: req.body.month,
     },
   });
+
   if (user == null) {
     res.status(200).json({
       data: { review: false },
@@ -386,29 +435,54 @@ const getMessReview = catchAsync(async (req, res) => {
 
 const getMessReviewByMessId = catchAsync(async (req, res) => {
   const data = await messReview.findAll({
-    where: { messId: req.params.messId },
+    where: {
+      messId: req.params.messId,
+      year: req.params.year,
+      month: req.params.month,
+    },
   });
+  let ret = {
+    quality: 0,
+    quantity: 0,
+    taste: 0,
+    catering: 0,
+    hyginess: 0,
+    punctuality: 0,
+  };
+  for (let i = 0; i < data.length; i++) {
+    ret.quality = ret.quality + data[i].quality;
+    ret.quantity = ret.quantity + data[i].quantity;
+    ret.taste = ret.taste + data[i].taste;
+    ret.catering = ret.catering + data[i].catering;
+    ret.hyginess = ret.hyginess + data[i].hyginess;
+    ret.punctuality = ret.punctuality + data[i].punctuality;
+  }
+  ret.quality = ret.quality / data.length;
+  ret.quantity = ret.quantity / data.length;
+  ret.taste = ret.taste / data.length;
+  ret.catering = ret.catering / data.length;
+  ret.hyginess = ret.hyginess / data.length;
+  ret.punctuality = ret.punctuality / data.length;
+
   res.status(200).json({
-    data: data,
+    data: ret,
   });
 });
 
 const getMessAvailability = catchAsync(async (req, res) => {
   const data = await messAvailability.findAll();
+
   res.status(200).json({
     data: data,
   });
 });
 
 const getMessAvailabilityByMessId = catchAsync(async (req, res) => {
-  const data = await messAvailability.findAll({
-    where: { messId: req.params.messId },
-  });
+  const data = await messAvailability.findAll();
   res.status(200).json({
     data: data,
   });
 });
-
 
 module.exports = {
   getMessDetails,
@@ -433,5 +507,7 @@ module.exports = {
   getMessReviewByMessId,
   checkMessReview,
   getMessAvailability,
-  getMessAvailabilityByMessId
+  getMessAvailabilityByMessId,
+  getMessUserByStudentId,
+  getMessAdminByEmail
 };

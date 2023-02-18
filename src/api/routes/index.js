@@ -7,10 +7,10 @@ const cheifWardenRoute = require("./cheifWarden");
 const hostelManagerRoute = require("./hostelManager");
 const hostelOfficeAdminRoute = require("./hostelofficeAdmin");
 const hasRoute = require("./has");
-
+const duesRoute = require("./dues")
 const router = express.Router();
 
-
+router.use("/dues", duesRoute)
 router.use("/auth", authRoute);
 router.use("/mess", messRoute);
 router.use("/hostel", hostelRoute);

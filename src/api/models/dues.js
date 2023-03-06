@@ -12,7 +12,10 @@ const dues = db.define(
     prevMonthDues: {
       type: DataTypes.INTEGER,
     },
-    currMonthCharges: {
+    messBill:{
+      type: DataTypes.INTEGER,
+    },
+    hostelBill:{
       type: DataTypes.INTEGER,
     },
     fine: {
@@ -28,9 +31,12 @@ const dues = db.define(
       type: DataTypes.INTEGER,
     },
     misscellaneousReason: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
     },
-    currMonthDues: {
+    currentMonthDues: {
+      type: DataTypes.INTEGER,
+    },
+    dues:{
       type: DataTypes.INTEGER,
     },
     remark: {
@@ -49,7 +55,7 @@ student.hasOne(dues, {
 
 hostel.hasMany(dues, {
   foreignKey: "hostelId",
-  sourceKey: "hostel",
+  sourceKey: "hostelId",
 });
 
 (async () => {

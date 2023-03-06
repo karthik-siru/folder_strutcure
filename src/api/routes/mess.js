@@ -24,7 +24,8 @@ const {
   getMessAvailability,
   getMessAvailabilityByMessId,
   getMessUserByStudentId,
-  getMessAdminByEmail
+  getMessAdminByEmail,
+  previousMessDetails
 } = require("../controllers/mess");
 const student = require("../models/student");
 const { messAdmin } = require("../models/mess");
@@ -116,6 +117,7 @@ router.get(
 router.post("/mess-user", auth([2, student]), createMessUser);
 router.post("/mess-user/update", auth([2, student]), updateMessUser);
 router.get("/mess-user/:studentId/:year/:month", auth([2, student]), getMyMess);
+router.get("/previous-mess-user/:studentId", auth([2, student]), previousMessDetails);
 router.get(
   "/mess-user/:year/:month",
   auth([5, messAdmin, hostelAdmin, hostelWarden, careTaker]),

@@ -29,7 +29,7 @@ router.param("rollno", getStudentById);
 // routes
 router.post("/login", Login);
 
-router.post("/register",auth([2,messAdmin]), registerStudent);
+router.post("/register", auth([2,hostelAdmin]),registerStudent);
 router.get("/forgot-password/:rollno", forgotPassword);
 router.post("/change-password/:rollno", auth([2, student]), changePassword);
 router.post(
@@ -55,6 +55,10 @@ router.get(
   auth([6, messAdmin, hostelAdmin, hostelWarden, careTaker, hostelSecretary]),
   getAllStudents
 );
-router.get("/get-student-by-rollno", auth([6, messAdmin, hostelAdmin, hostelWarden, careTaker, hostelSecretary]), getStudentByRollno);
+router.get(
+  "/get-student-by-rollno",
+  auth([6, messAdmin, hostelAdmin, hostelWarden, careTaker, hostelSecretary]),
+  getStudentByRollno
+);
 
 module.exports = router;

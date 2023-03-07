@@ -108,7 +108,7 @@ const getMessAdminByEmail = catchAsync(async (req, res) => {
   const data = await messAdmin.findOne({
     where: { email: req.body.email },
   });
-  data.pswd = undefined
+  data.pswd = undefined;
   res.status(200).json({
     data: data,
   });
@@ -484,6 +484,24 @@ const getMessAvailabilityByMessId = catchAsync(async (req, res) => {
   });
 });
 
+const previousMessDetails = catchAsync(async (req, res) => {
+  const data = await messUser.findOne({
+    where: {
+      studentId: req.params.studentId,
+    },
+  });
+  if (data) {
+    res.status(200).json({
+      data: data,
+    });
+  } else {
+    res.status(401).json({
+      err: "Unable to find student mess details",
+    });
+  }
+});
+
+
 module.exports = {
   getMessDetails,
   getMessDetailsByMessId,
@@ -509,5 +527,6 @@ module.exports = {
   getMessAvailability,
   getMessAvailabilityByMessId,
   getMessUserByStudentId,
-  getMessAdminByEmail
+  getMessAdminByEmail,
+  previousMessDetails
 };

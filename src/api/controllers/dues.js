@@ -25,7 +25,7 @@ const getDues = catchAsync(async (req, res) => {
 
 const updateDues = catchAsync(async (req, res) => {
     for(var i=0; i<req.body.length; i++) {
-  const isExist = await dues.findOne({ rollno: { email: req.body.data[i].rollno } });
+  const isExist = await dues.findOne({ where: { rollno: req.body.data[i].rollno } });
   const body = req.body.data[i];
   if(isExist==null){
     const data = await dues.create({
@@ -67,7 +67,7 @@ res.status(200).json({
 });
 
 const updateDuesByRollno = catchAsync(async (req, res) => {
-    const isExist = await dues.findOne({ rollno: { email: req.body.rollno } });
+    const isExist = await dues.findOne({ where: { rollno: req.body.rollno } });
     const body = req.body;
     if(isExist==null){
       const data = await dues.create({

@@ -9,6 +9,7 @@ const hostelOfficeAdminRoute = require("./hostelofficeAdmin");
 const hasRoute = require("./has");
 const duesRoute = require("./dues")
 const paymentRoute = require("./payment")
+const complaint = require("./complaint")
 const router = express.Router();
 
 router.use("/dues", duesRoute)
@@ -21,4 +22,5 @@ router.use("/hostel-manager", hostelManagerRoute);
 router.use("/hostel-office-admin", hostelOfficeAdminRoute);
 router.use("/has", hasRoute);
 router.use("/payment", paymentRoute)
+router.use("/complaint", complaint);
 module.exports = router;

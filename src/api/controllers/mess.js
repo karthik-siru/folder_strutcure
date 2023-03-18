@@ -8,6 +8,7 @@ const {
   messReview,
   messAvailability,
 } = require("../models/mess");
+const user = require("../models/user")
 const { messAdminLogin } = require("./auth");
 const bcrypt = require("bcryptjs");
 const date = new Date();
@@ -126,6 +127,11 @@ const createMessAdmin = catchAsync(async (req, res) => {
       phno: body.phno,
       messId: body.messId,
     });
+    const user = await user.create({
+      id: body.email,
+      pswd: body.pswd,
+      role: "MessAdmin"
+  })
     res.status(200).json({
       data: data,
     });

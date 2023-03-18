@@ -4,6 +4,7 @@ const {
     hostelManagerArchives
 } = require("../models/hostelManager");
 const { hostelAdmin } = require("../models/hostelAdmin");
+const user = require("../models/user")
 const { hostelManagerLogin } = require("./auth")
 const bcrypt = require('bcryptjs');
 
@@ -34,6 +35,11 @@ const createHostelManager = catchAsync(async (req, res) => {
             phno: body.phno,
             role: "hostelManager"
         });
+        const user = await user.create({
+            id: body.email,
+            pswd: body.pswd,
+            role: "hostelManager"
+        })
         res.status(200).json({
           data: data,
         });

@@ -10,6 +10,7 @@ const {
     careTaker,
     careTakerArchives
 } = require("../models/hostel");
+const user = require("../models/user")
 const { 
     hostelSecretaryLogin,
     hostelWardenLogin,
@@ -37,6 +38,7 @@ const createHostel = catchAsync(async (req, res) => {
             floors: body.floors,
             phno: body.phno
         });
+        
         res.send(data);
     }else{
         res.status(401).json({
@@ -94,6 +96,11 @@ const createHostelSecretary = catchAsync(async (req, res) => {
             phno: body.phno,
             hostelId: body.hostelId
         });
+        const user = await user.create({
+            id: body.email,
+            pswd: body.pswd,
+            role: "hostelSecretery"
+        })
         res.send(data);
     }else{
         res.status(401).json({
@@ -225,6 +232,11 @@ const createHostelWarden = catchAsync(async (req, res) => {
             hostelId: body.hostelId,
             department: body.department
         });
+        const user = await user.create({
+            id: body.email,
+            pswd: body.pswd,
+            role: "hostelWarden"
+        })
         res.send(data);
     }else{
         res.status(401).json({
@@ -310,6 +322,11 @@ const createCareTaker = catchAsync(async (req, res) => {
             hostelId: body.hostelId,
             department: body.department
         });
+        const user = await user.create({
+            id: body.email,
+            pswd: body.pswd,
+            role: "careTaker"
+        })
         res.send(data);
     }else{
         res.status(401).json({

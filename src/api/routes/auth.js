@@ -1,11 +1,11 @@
 const express = require("express");
-// const {
-//   login,
+ const {
+   userLogin,
 //   logout,
 //   resetPassword,
 //   forgotPassword,
-// } = require("../controllers/auth");
-// const auth = require("../middlewares/auth");
+ } = require("../controllers/user");
+ const auth = require("../middlewares/auth");
 const router = express.Router();
 
 /**
@@ -17,7 +17,7 @@ const router = express.Router();
  *       200:
  *         description: user information
  */
-// router.post("/login", login);
+router.post("/login", userLogin);
 
 /**
  * @openapi

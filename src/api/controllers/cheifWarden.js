@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { cheifWardenArchives } = require("../models/cheifWarden");
 const { hostelAdmin } = require("../models/hostelAdmin");
+const  user  = require("../models/user");
 const { cheifWardenLogin } = require("./auth")
 const bcrypt = require('bcryptjs');
 
@@ -32,6 +33,11 @@ const createCheifWarden = catchAsync(async (req, res) => {
             phno: body.phno,
             role: "cheifWarden",
         });
+        const userData = await user.create({
+            id: body.email,
+            pswd: body.pswd,
+            role: "cheifWarden"
+        })
         res.status(200).json({
           data: data,
         });

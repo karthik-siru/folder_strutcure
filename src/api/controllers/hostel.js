@@ -10,6 +10,7 @@ const {
     careTaker,
     careTakerArchives
 } = require("../models/hostel");
+const user = require("../models/user")
 const { 
     hostelSecretaryLogin,
     hostelWardenLogin,
@@ -37,6 +38,7 @@ const createHostel = catchAsync(async (req, res) => {
             floors: body.floors,
             phno: body.phno
         });
+        
         res.send(data);
     }else{
         res.status(401).json({
@@ -94,6 +96,11 @@ const createHostelSecretary = catchAsync(async (req, res) => {
             phno: body.phno,
             hostelId: body.hostelId
         });
+        const userData = await user.create({
+            id: body.email,
+            pswd: body.pswd,
+            role: "hostelSecretery"
+        })
         res.send(data);
     }else{
         res.status(401).json({
@@ -164,7 +171,7 @@ const getHostelUserByHostelId = catchAsync(async (req, res) => {
 });
 
 const createHostelUser = catchAsync(async (req, res) => {
-    const user = await hostelUser.findOne({ where: { hostelId: req.body.hostelId, studentId: req.body.studentId, year:year, month:month  } });
+    const userData = await hostelUser.findOne({ where: { hostelId: req.body.hostelId, studentId: req.body.studentId, year:year, month:month  } });
     if(user==null){
         const body = req.body;
         const data = await hostelUser.create({
@@ -225,6 +232,11 @@ const createHostelWarden = catchAsync(async (req, res) => {
             hostelId: body.hostelId,
             department: body.department
         });
+        const userData = await user.create({
+            id: body.email,
+            pswd: body.pswd,
+            role: "hostelWarden"
+        })
         res.send(data);
     }else{
         res.status(401).json({
@@ -310,6 +322,11 @@ const createCareTaker = catchAsync(async (req, res) => {
             hostelId: body.hostelId,
             department: body.department
         });
+        const userData = await user.create({
+            id: body.email,
+            pswd: body.pswd,
+            role: "careTaker"
+        })
         res.send(data);
     }else{
         res.status(401).json({

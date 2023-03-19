@@ -23,15 +23,14 @@ var transporter = nodemailer.createTransport({
 exports.registerStudent = async (req, res) => {
   try {
     const { name, rollno, email, pswd, dob, address, phno, gender } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const oldStudent = await student.findOne({ where: { rollno: rollno } });
     var dateMomentObject = moment(dob, "DD/MM/YYYY");
     var dobDateObject = dateMomentObject.toDate();
-    console.log(oldStudent);
     var encryptedpswd = await bcrypt.hash(pswd, 8);
     if (oldStudent === null) {
       const newStudent = await student.create({
-        name: `${name}`,
+        name: name,
         email: email,
         rollno: rollno,
         pswd: encryptedpswd,
@@ -57,6 +56,7 @@ exports.registerStudent = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(401).json({
       err: "unable to register Student",
     });
@@ -207,7 +207,6 @@ exports.getStudentByRollno = async (req, res) => {
     });
   }
 };
-
 
 exports.getStudentByPartialName = async (req, res) => {
   try {

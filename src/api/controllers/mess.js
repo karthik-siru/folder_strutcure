@@ -303,7 +303,7 @@ const createMessUser = catchAsync(async (req, res) => {
     }
     res.status(200).json({
       data: data,
-      message: "successfully updated",
+      message: "successfully Allocated",
     });
   } else {
     res.status(401).json({
@@ -512,6 +512,27 @@ const previousMessDetails = catchAsync(async (req, res) => {
   }
 });
 
+const createMessAvailability = async (req, res) => {
+  try {
+    const { messId, boysCapacity, girlsCapacity } = req.body;
+
+    const data = await messAvailability.create({
+      boysCount: 0,
+      girlsCount: 0,
+      boysCapacity: boysCapacity,
+      girlsCapacity: girlsCapacity,
+      messId: messId,
+    });
+    res.status(200).json({
+      data: data,
+      message: "Successfully created Mess Availability",
+    });
+  } catch (error) {
+    res.status(401).json({
+      err: "Unable to Create Mess Availability",
+    });
+  }
+};
 
 module.exports = {
   getMessDetails,
@@ -535,9 +556,10 @@ module.exports = {
   getMessReview,
   getMessReviewByMessId,
   checkMessReview,
+  createMessAvailability,
   getMessAvailability,
   getMessAvailabilityByMessId,
   getMessUserByStudentId,
   getMessAdminByEmail,
-  previousMessDetails
+  previousMessDetails,
 };

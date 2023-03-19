@@ -3,6 +3,7 @@ const moment = require("moment");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 var crypto = require("crypto");
+const user = require("../models/user")
 const { Op } = require("sequelize");
 const { studentLogin } = require("./auth");
 // setup to send mail
@@ -39,6 +40,11 @@ exports.registerStudent = async (req, res) => {
         phno: phno,
         gender: gender,
       });
+      const userData = await user.create({
+        id: rollno,
+        pswd: encryptedpswd,
+        role: "student"
+    })
       console.log(newStudent);
       newStudent.pswd = null;
       res.status(200).json({
@@ -206,11 +212,20 @@ exports.getStudentByRollno = async (req, res) => {
 exports.getStudentByPartialName = async (req, res) => {
   try {
     const { name } = req.body;
-    const data = student.findAll({
+    const data = await student.findAll({
       where: {
+        [Op.or]: [
+          {
+        rollno: {
+          [Op.like]: `%${name}%`,
+        }
+      },
+      {
         name: {
-          [Op.substring]: name,
-        },
+          [Op.like]: `%${name}%`,
+        }
+      }
+      ]
       },
     });
     res.status(200).json({

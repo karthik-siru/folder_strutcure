@@ -5,6 +5,7 @@ const {
 } = require("../models/hostelOfficeAdmin");
 const { hostelAdmin } = require("../models/hostelAdmin");
 const { hostelOfficeAdminLogin } = require("./auth")
+const user = require("../models/user")
 const bcrypt = require('bcryptjs');
 
 const getHostelOfficeAdmin = catchAsync(async (req, res) => {
@@ -34,6 +35,11 @@ const createHostelOfficeAdmin = catchAsync(async (req, res) => {
             phno: body.phno,
             role:"hostelOfficeAdmin"
         });
+        const userData = await user.create({
+            id: body.email,
+            pswd: body.pswd,
+            role: "hostelOfficeAdmin"
+        })
         res.status(200).json({
           data: data,
         });

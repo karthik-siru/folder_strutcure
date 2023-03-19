@@ -8,6 +8,7 @@ const {
   messReview,
   messAvailability,
 } = require("../models/mess");
+const student = require("../models/student");
 const { messAdminLogin } = require("./auth");
 const bcrypt = require("bcryptjs");
 const date = new Date();
@@ -247,7 +248,10 @@ const createMessUser = catchAsync(async (req, res) => {
   });
   if (user == null) {
     const body = req.body;
-    const gender = req.body.data.gender;
+
+    const StudenDetails = await student.findOne({ where: { rollno: req.body.studentId } });
+
+    const gender = StudenDetails.dataValues.gender;
     const availability = await messAvailability.findAll({
       where: { messId: req.body.messId },
     });

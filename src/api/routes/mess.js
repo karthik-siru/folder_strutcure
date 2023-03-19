@@ -114,7 +114,7 @@ router.get(
   getMessAdminArchivesByMessId
 );
 
-router.post("/mess-user", auth([2, student]), createMessUser);
+router.post("/mess-user", auth([3, student, messAdmin]), createMessUser);
 router.post("/mess-user/update", auth([2, student]), updateMessUser);
 router.get("/mess-user/:studentId/:year/:month", auth([2, student]), getMyMess);
 router.get("/previous-mess-user/:studentId", auth([2, student]), previousMessDetails);

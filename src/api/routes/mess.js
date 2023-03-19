@@ -21,11 +21,12 @@ const {
   getMessReview,
   checkMessReview,
   getMessReviewByMessId,
+  createMessAvailability,
   getMessAvailability,
   getMessAvailabilityByMessId,
   getMessUserByStudentId,
   getMessAdminByEmail,
-  previousMessDetails
+  previousMessDetails,
 } = require("../controllers/mess");
 const student = require("../models/student");
 const { messAdmin } = require("../models/mess");
@@ -66,7 +67,7 @@ router.get(
   ]),
   getMessAdmin
 );
-router.post("/mess-admin-by-email",auth([2,messAdmin]),getMessAdminByEmail)
+router.post("/mess-admin-by-email", auth([2, messAdmin]), getMessAdminByEmail);
 router.get(
   "/mess-admin/:messId",
   auth([
@@ -117,7 +118,11 @@ router.get(
 router.post("/mess-user", auth([2, student]), createMessUser);
 router.post("/mess-user/update", auth([2, student]), updateMessUser);
 router.get("/mess-user/:studentId/:year/:month", auth([2, student]), getMyMess);
-router.get("/previous-mess-user/:studentId", auth([2, student]), previousMessDetails);
+router.get(
+  "/previous-mess-user/:studentId",
+  auth([2, student]),
+  previousMessDetails
+);
 router.get(
   "/mess-user/:year/:month",
   auth([5, messAdmin, hostelAdmin, hostelWarden, careTaker]),
@@ -131,10 +136,9 @@ router.get(
 
 router.get(
   "/mess-user-studentid/:studentId",
-  auth([6,student, messAdmin, hostelAdmin, hostelWarden, careTaker]),
+  auth([6, student, messAdmin, hostelAdmin, hostelWarden, careTaker]),
   getMessUserByStudentId
 );
-
 
 //mess-review
 router.post("/mess-review", auth([2, student]), createMessReview);
@@ -168,6 +172,7 @@ router.get(
 
 // mess table
 router.post("", auth([2, hostelAdmin]), createMess);
+// router.post("/create", createMess);
 router.post("/update", auth([2, hostelAdmin]), updateMessDetails);
 router.get(
   "",
@@ -197,6 +202,8 @@ router.get(
 );
 
 //mess-availabilty
+
+router.post("/mess-availability/create", createMessAvailability);
 router.get(
   "/mess-availablity/:id",
   auth([

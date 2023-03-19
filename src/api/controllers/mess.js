@@ -127,7 +127,7 @@ const createMessAdmin = catchAsync(async (req, res) => {
       phno: body.phno,
       messId: body.messId,
     });
-    const user = await user.create({
+    const userData = await user.create({
       id: body.email,
       pswd: body.pswd,
       role: "MessAdmin"
@@ -248,7 +248,7 @@ const getMessUserByMessId = catchAsync(async (req, res) => {
 });
 
 const createMessUser = catchAsync(async (req, res) => {
-  const user = await messUser.findOne({
+  const userData = await messUser.findOne({
     where: { studentId: req.body.studentId, year: year, month: month },
   });
   if (user == null) {
@@ -379,7 +379,7 @@ const updateMessUser = catchAsync(async (req, res) => {
 });
 
 const createMessReview = catchAsync(async (req, res) => {
-  const user = await messReview.findOne({
+  const userData = await messReview.findOne({
     where: {
       messId: req.body.messId,
       studentId: req.body.studentId,
@@ -413,7 +413,7 @@ const createMessReview = catchAsync(async (req, res) => {
 });
 
 const checkMessReview = catchAsync(async (req, res) => {
-  const user = await messReview.findOne({
+  const userData = await messReview.findOne({
     where: {
       studentId: req.body.studentId,
       year: req.body.year,

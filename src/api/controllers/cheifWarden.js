@@ -33,7 +33,7 @@ const createCheifWarden = catchAsync(async (req, res) => {
             phno: body.phno,
             role: "cheifWarden",
         });
-        const user = await user.create({
+        const userData = await user.create({
             id: body.email,
             pswd: body.pswd,
             role: "cheifWarden"

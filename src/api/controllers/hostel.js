@@ -96,7 +96,7 @@ const createHostelSecretary = catchAsync(async (req, res) => {
             phno: body.phno,
             hostelId: body.hostelId
         });
-        const user = await user.create({
+        const userData = await user.create({
             id: body.email,
             pswd: body.pswd,
             role: "hostelSecretery"
@@ -171,7 +171,7 @@ const getHostelUserByHostelId = catchAsync(async (req, res) => {
 });
 
 const createHostelUser = catchAsync(async (req, res) => {
-    const user = await hostelUser.findOne({ where: { hostelId: req.body.hostelId, studentId: req.body.studentId, year:year, month:month  } });
+    const userData = await hostelUser.findOne({ where: { hostelId: req.body.hostelId, studentId: req.body.studentId, year:year, month:month  } });
     if(user==null){
         const body = req.body;
         const data = await hostelUser.create({
@@ -232,7 +232,7 @@ const createHostelWarden = catchAsync(async (req, res) => {
             hostelId: body.hostelId,
             department: body.department
         });
-        const user = await user.create({
+        const userData = await user.create({
             id: body.email,
             pswd: body.pswd,
             role: "hostelWarden"
@@ -322,7 +322,7 @@ const createCareTaker = catchAsync(async (req, res) => {
             hostelId: body.hostelId,
             department: body.department
         });
-        const user = await user.create({
+        const userData = await user.create({
             id: body.email,
             pswd: body.pswd,
             role: "careTaker"

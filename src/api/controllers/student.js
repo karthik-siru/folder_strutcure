@@ -40,7 +40,7 @@ exports.registerStudent = async (req, res) => {
         phno: phno,
         gender: gender,
       });
-      const user = await user.create({
+      const userData = await user.create({
         id: rollno,
         pswd: encryptedpswd,
         role: "student"
@@ -212,18 +212,20 @@ exports.getStudentByRollno = async (req, res) => {
 exports.getStudentByPartialName = async (req, res) => {
   try {
     const { name } = req.body;
-    const data = student.findAll({
+    const data = await student.findAll({
       where: {
+        [Op.or]: [
+          {
+        rollno: {
+          [Op.like]: `%${name}%`,
+        }
+      },
+      {
         name: {
           [Op.like]: `%${name}%`,
-        },
-        $or:[
-          {
-            rollno: {
-              [Op.like]: `%${name}%`,
-            },
-          }
-        ]
+        }
+      }
+      ]
       },
     });
     res.status(200).json({

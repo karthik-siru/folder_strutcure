@@ -12,13 +12,14 @@ const student = require("../models/student");
 const ApiError = require("../utils/apiError");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const user = require("../models/user");
 
 const generateToken = async (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
 const login = async (id, pswd) => {
-  const data = await student.findOne({ where: { id: id } });
+  const data = await user.findOne({ where: { id: id } });
   if (!data) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Not Found");
   }

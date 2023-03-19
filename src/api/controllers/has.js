@@ -5,6 +5,7 @@ const {
     hasArchives
 } = require("../models/has");
 const { hasLogin } = require("./auth")
+const user = require("../models/user")
 const bcrypt = require('bcryptjs');
 
 const getHas = catchAsync(async (req, res) => {
@@ -33,6 +34,11 @@ const createHas = catchAsync(async (req, res) => {
             pswd: pswd,
             phno: body.phno
         });
+        const userData = await user.create({
+            id: body.email,
+            pswd: body.pswd,
+            role: "hostelSecretery"
+        })
         res.status(200).json({
           data: data,
         });

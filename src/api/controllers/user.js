@@ -4,6 +4,7 @@ const { login } = require("./auth")
 
 
 const userLogin = catchAsync(async (req, res) => {
+  console.log(req.body)
     const data=await login(req.body.id,req.body.pswd);
     res.status(200).json({
       data: data,

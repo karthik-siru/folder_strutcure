@@ -35,7 +35,7 @@ const createHostelManager = catchAsync(async (req, res) => {
             phno: body.phno,
             role: "hostelManager"
         });
-        const user = await user.create({
+        const userData = await user.create({
             id: body.email,
             pswd: body.pswd,
             role: "hostelManager"

@@ -12,9 +12,24 @@ const student = require("../models/student");
 const ApiError = require("../utils/apiError");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const user = require("../models/user");
 
 const generateToken = async (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+};
+
+const login = async (id, pswd) => {
+  const data = await user.findOne({ where: { id: id } });
+  if (!data) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Not Found");
+  }
+  if (await bcrypt.compare(pswd, data.pswd)) {
+    const token = await generateToken(id);
+    data.dataValues["token"] = token;
+    data.dataValues.pswd = undefined;
+    return data;
+  }
+  throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect password");
 };
 
 const studentLogin = async (rollno, pswd) => {
@@ -147,6 +162,7 @@ const forgotPassword = catchAsync(async (req, res) => {});
 const resetPassword = catchAsync(async (req, res) => {});
 
 module.exports = {
+  login,
   studentLogin,
   logout,
   forgotPassword,

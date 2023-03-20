@@ -10,7 +10,7 @@ const {
 } = require("../models/mess");
 
 const student = require("../models/student");
-const user = require("../models/user")
+const user = require("../models/user");
 const { messAdminLogin } = require("./auth");
 const bcrypt = require("bcryptjs");
 const date = new Date();
@@ -132,8 +132,8 @@ const createMessAdmin = catchAsync(async (req, res) => {
     const userData = await user.create({
       id: body.email,
       pswd: body.pswd,
-      role: "MessAdmin"
-  })
+      role: "MessAdmin",
+    });
     res.status(200).json({
       data: data,
     });
@@ -256,7 +256,9 @@ const createMessUser = catchAsync(async (req, res) => {
   if (user == null) {
     const body = req.body;
 
-    const StudenDetails = await student.findOne({ where: { rollno: req.body.studentId } });
+    const StudenDetails = await student.findOne({
+      where: { rollno: req.body.studentId },
+    });
 
     const gender = StudenDetails.dataValues.gender;
     const availability = await messAvailability.findAll({
@@ -496,7 +498,8 @@ const getMessAvailabilityByMessId = catchAsync(async (req, res) => {
 });
 
 const previousMessDetails = catchAsync(async (req, res) => {
-  const data = await messUser.findOne({
+  const data = await messUser.findAll
+  ({
     where: {
       studentId: req.params.studentId,
     },

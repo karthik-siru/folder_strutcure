@@ -497,7 +497,8 @@ const getMessAvailabilityByMessId = catchAsync(async (req, res) => {
 });
 
 const previousMessDetails = catchAsync(async (req, res) => {
-  const data = await messUser.findAll({
+  const data = await messUser.findAll
+  ({
     where: {
       studentId: req.params.studentId,
     },

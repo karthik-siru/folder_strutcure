@@ -10,7 +10,7 @@ const {
 } = require("../models/mess");
 
 const student = require("../models/student");
-const user = require("../models/user")
+const user = require("../models/user");
 const { messAdminLogin } = require("./auth");
 const bcrypt = require("bcryptjs");
 const date = new Date();
@@ -132,8 +132,8 @@ const createMessAdmin = catchAsync(async (req, res) => {
     const userData = await user.create({
       id: body.email,
       pswd: body.pswd,
-      role: "MessAdmin"
-  })
+      role: "MessAdmin",
+    });
     res.status(200).json({
       data: data,
     });
@@ -256,7 +256,9 @@ const createMessUser = catchAsync(async (req, res) => {
   if (user == null) {
     const body = req.body;
 
-    const StudenDetails = await student.findOne({ where: { rollno: req.body.studentId } });
+    const StudenDetails = await student.findOne({
+      where: { rollno: req.body.studentId },
+    });
 
     const gender = StudenDetails.dataValues.gender;
     const availability = await messAvailability.findAll({
@@ -448,8 +450,6 @@ const getMessReviewByMessId = catchAsync(async (req, res) => {
   const data = await messReview.findAll({
     where: {
       messId: req.params.messId,
-      year: req.params.year,
-      month: req.params.month,
     },
   });
   let ret = {
@@ -459,6 +459,7 @@ const getMessReviewByMessId = catchAsync(async (req, res) => {
     catering: 0,
     hyginess: 0,
     punctuality: 0,
+    id: req.params.messId,
   };
   for (let i = 0; i < data.length; i++) {
     ret.quality = ret.quality + data[i].quality;

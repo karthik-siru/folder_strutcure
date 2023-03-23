@@ -450,8 +450,6 @@ const getMessReviewByMessId = catchAsync(async (req, res) => {
   const data = await messReview.findAll({
     where: {
       messId: req.params.messId,
-      year: req.params.year,
-      month: req.params.month,
     },
   });
   let ret = {
@@ -461,6 +459,7 @@ const getMessReviewByMessId = catchAsync(async (req, res) => {
     catering: 0,
     hyginess: 0,
     punctuality: 0,
+    id: req.params.messId,
   };
   for (let i = 0; i < data.length; i++) {
     ret.quality = ret.quality + data[i].quality;
